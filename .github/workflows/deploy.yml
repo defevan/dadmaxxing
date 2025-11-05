@@ -28,7 +28,7 @@ jobs:
           token: ${{ secrets.tumblr_token }}
           token_secret: ${{ secrets.tumblr_token_secret }}
           blog: ${{ secrets.tumblr_blog }}
-        run: npm run tumblr
+        run: npm run tumblr-ci
 
       - name: generate dist
         run: npm run build
