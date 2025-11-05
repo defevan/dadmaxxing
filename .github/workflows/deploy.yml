@@ -1,0 +1,42 @@
+name: build and deploy
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch: {}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: install deps
+        run: npm ci
+
+      - name: generate static tumblr files
+        env:
+          tumblr_consumer_key: ${{ secrets.TUMBLR_CONSUMER_KEY }}
+          tumblr_consumer_secret: ${{ secrets.TUMBLR_CONSUMER_SECRET }}
+          tumblr_token: ${{ secrets.TUMBLR_TOKEN }}
+          tumblr_token_secret: ${{ secrets.TUMBLR_TOKEN_SECRET }}
+          tumblr_blog: ${{ secrets.TUMBLR_BLOG }}
+        run: npm run tumblr-ci
+
+      - name: generate dist
+        run: | 
+          npm run build
+          cp dist/index.html dist/404.html # github-pages-ism to support single page apps
+
+      - name: deploy to github pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
