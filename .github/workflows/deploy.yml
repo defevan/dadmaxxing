@@ -1,0 +1,40 @@
+name: build and deploy
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch: {}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: install deps
+        run: npm ci
+
+      - name: generate static tumblr files
+        env:
+          consumer_key: ${{ secrets.tumblr_consumer_key }}
+          consumer_secret: ${{ secrets.tumblr_consumer_secret }}
+          token: ${{ secrets.tumblr_token }}
+          token_secret: ${{ secrets.tumblr_token_secret }}
+          blog: ${{ secrets.tumblr_blog }}
+        run: npm run tumblr
+
+      - name: generate dist
+        run: npm run build
+
+      - name: deploy to github pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist

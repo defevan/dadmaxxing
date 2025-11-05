@@ -1,0 +1,24 @@
+{
+  "scripts": {
+    "start": "vite",
+    "build": "tsc && vite build",
+    "tumblr": "tsx --env-file .env scripts/gen-blog-data.ts",
+    "tumblr-ci": "tsx scripts/gen-blog-data.ts",
+    "fmt": "prettier --write src scripts shared"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "decoders": "^2.7.5",
+    "prettier": "^3.6.2",
+    "sass-embedded": "^1.93.3",
+    "tsx": "^4.20.6",
+    "tumblr.js": "^5.0.1",
+    "typescript": "~5.9.3",
+    "vite": "^7.1.7"
+  },
+  "dependencies": {
+    "immer": "^10.2.0",
+    "navigo": "^8.11.1",
+    "rxjs": "^7.8.2"
+  }
+}

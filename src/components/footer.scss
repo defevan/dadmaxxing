@@ -1,0 +1,25 @@
+app-footer {
+  footer {
+    background: var(--footer-bg);
+    color: var(--text-muted);
+    padding: var(--spacing-unit) var(--gutter);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--gutter);
+
+    button {
+      border: solid var(--text-muted) 2px;
+      border-radius: 9999px;
+      padding: calc(var(--spacing-unit) / 2) var(--spacing-unit);
+      color: var(--text-muted);
+      cursor: pointer;
+      background-color: rgba(255, 255, 255, 0.05);
+      transition: background-color 150ms ease;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+      }
+    }
+  }
+}
