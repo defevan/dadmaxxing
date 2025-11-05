@@ -23,12 +23,12 @@ jobs:
 
       - name: generate static tumblr files
         env:
-          consumer_key: ${{ secrets.TUMBLR_CONSUMER_KEY }}
-          consumer_secret: ${{ secrets.TUMBLR_CONSUMER_SECRET }}
-          token: ${{ secrets.TUMBLR_TOKEN }}
-          token_secret: ${{ secrets.TUMBLR_TOKEN_SECRET }}
-          blog: ${{ secrets.TUMBLR_BLOG }}
-        run: npm run tumblr-ci
+          CONSUMER_KEY: ${{ secrets.TUMBLR_CONSUMER_KEY }}
+          CONSUMER_SECRET: ${{ secrets.TUMBLR_CONSUMER_SECRET }}
+          TOKEN: ${{ secrets.TUMBLR_TOKEN }}
+          TOKEN_SECRET: ${{ secrets.TUMBLR_TOKEN_SECRET }}
+          BLOG: ${{ secrets.TUMBLR_BLOG }}
+        run: env tumblr_consumer_key=$TUMBLR_CONSUMER_KEY tumblr_consumer_secret=$TUMBLR_CONSUMER_SECRET tumblr_token=$TUMBLR_TOKEN tumblr_token_secret=$TUMBLR_TOKEN_SECRET tumblr_blog=$BLOG npm run tumblr-ci
 
       - name: generate dist
         run: npm run build
