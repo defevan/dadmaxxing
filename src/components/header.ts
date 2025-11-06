@@ -1,6 +1,7 @@
 import { consume } from "@lit/context";
 import { html } from "lit";
 import { customElement } from "lit/decorators.js";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import type { Meta } from "../../shared/types";
 import { AppElement } from "../lib/element";
 import { observe } from "../lib/observe-decorator";
@@ -39,7 +40,7 @@ export class HeaderElement extends AppElement {
   render() {
     const p = this.meta
       ? html`<p>${this.meta.description}</p>`
-      : html`<p .innerHTML=${"&nbsp;"}></p>`;
+      : html`<p>${unsafeHTML("&nbsp;")}</p>`;
     return html`
       <header>
         <div>
@@ -56,6 +57,6 @@ export class HeaderElement extends AppElement {
       return html`<a href=${href}>${label}</a>`;
     }
     const active = this.pathname === href;
-    return html`<a href=${href} active=${active}>${label}</a>`;
+    return html`<a href=${href} ?active=${active}>${label}</a>`;
   }
 }

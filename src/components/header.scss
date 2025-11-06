@@ -32,7 +32,7 @@ app-header {
       color: var(--text-muted);
     }
 
-    &[active="true"] {
+    &[active] {
       color: var(--text-primary);
     }
 

@@ -1,6 +1,7 @@
 import { consume } from "@lit/context";
 import { html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { tap } from "rxjs/operators";
 import { type Post } from "../../shared/types";
 import { AppElement } from "../lib/element";
@@ -43,7 +44,7 @@ export class PostBodyElement extends AppElement {
   node?: unknown;
 
   render() {
-    return html` <section .innerHTML=${this.body}></section> `;
+    return html` <section>${unsafeHTML(this.body)}</section> `;
   }
 }
 
