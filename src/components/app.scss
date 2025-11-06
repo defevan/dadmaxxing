@@ -20,12 +20,6 @@ body {
       min-height: calc(100vh - 65px); // height of footer
     }
 
-    app-post-list {
-      display: block;
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
-
     app-header,
     app-footer {
       display: block;

@@ -1,30 +1,29 @@
 app-post-list {
-  sl-card {
+  .card-container {
     display: block;
+    width: 100%;
+    margin: var(--sl-spacing-4x-large) 0;
 
-    [slot="header"] {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    sl-card {
+      display: block;
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
 
-      a {
-        color: initial;
+      [slot="header"] {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        a {
+          color: initial;
+        }
+      }
+
+      figure {
+        margin: 0;
       }
     }
-  }
-
-  figure {
-    margin: 0;
-  }
-
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  li {
-    margin: var(--sl-spacing-4x-large) 0;
   }
 
   .empty {

@@ -1,3 +1,9 @@
+import { flow } from "@lit-labs/virtualizer/layouts/flow.js";
+import {
+  virtualize,
+  virtualizerRef,
+  type VirtualizerHostElement,
+} from "@lit-labs/virtualizer/virtualize.js";
 import { consume } from "@lit/context";
 import { html } from "lit";
 import { customElement, property } from "lit/decorators.js";
@@ -50,6 +56,11 @@ export class PostBodyElement extends AppElement {
 
 @customElement("app-post-list")
 export class PostListElement extends AppElement {
+  /**
+   * set by virtualize directive
+   */
+  [virtualizerRef]?: VirtualizerHostElement[typeof virtualizerRef];
+
   @consume({ context: blogContext })
   blog!: Blog;
 
@@ -62,26 +73,39 @@ export class PostListElement extends AppElement {
   @property({ attribute: true })
   tags: Array<string> = [];
 
-  render() {
-    const filtered = (this.posts ?? []).filter((post) => {
-      return post.tags.some((tag) => this.tags.includes(tag));
-    });
-    if (filtered.length < 1 && Array.isArray(this.posts)) {
-      return html` <div class="empty">(⁎˃ᆺ˂) 404</div> `;
+  #filtered(): Array<Post> {
+    if (!this.posts) {
+      return [];
     }
-    return html`
-      <ul>
-        ${filtered.map((post) => this.renderPost(post))}
-      </ul>
-    `;
+    return this.posts.filter((p) =>
+      p.tags.some((tag) => this.tags.includes(tag)),
+    );
   }
 
-  renderPost(post: Post) {
+  scrollToPost(id: string): void {
+    const idx = this.#filtered().findIndex((post) => post.id === id);
+    this[virtualizerRef]?.element(idx)?.scrollIntoView();
+  }
+
+  render() {
+    const posts = this.#filtered();
+    if (posts.length < 1 && Array.isArray(this.posts)) {
+      return html` <div class="empty">(⁎˃ᆺ˂) 404</div> `;
+    }
+    return virtualize({
+      layout: flow({ direction: "vertical" }),
+      items: posts,
+      keyFunction: (post) => post.id,
+      renderItem: (post) => this.#renderPost(post),
+    });
+  }
+
+  #renderPost(post: Post) {
     const date = new Date(post.date);
     const url = `${location.origin}${location.pathname}#${post.id}`;
     return html`
-      <li tabindex="0" id=${post.id}>
-        <sl-card>
+      <div class="card-container">
+        <sl-card id=${post.id} tabindex="0">
           <div slot="header">
             <sl-format-date
               month="long"
@@ -97,16 +121,14 @@ export class PostListElement extends AppElement {
             <app-post-body body=${post.body}></app-post-body>
           </slot>
           <div slot="footer">
-            ${post.tags.map((tag) => this.renderTag(tag))}
+            ${post.tags.map((tag) => this.#renderTag(tag))}
           </div>
         </sl-card>
-      </li>
-
-      <li></li>
+      </div>
     `;
   }
 
-  renderTag(tag: string) {
+  #renderTag(tag: string) {
     const href = `${import.meta.env.BASE_URL}/${tag}`;
     const text = `#${tag}`;
     return html`

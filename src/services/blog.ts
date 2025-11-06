@@ -7,22 +7,23 @@ import type { Meta, Post } from "../../shared/types";
 export const blogContext = createContext<Blog>("blog");
 
 export class Blog {
-  public readonly meta$: Observable<Meta> = fromFetch(
+  readonly meta$: Observable<Meta> = fromFetch(
     `${import.meta.env.BASE_URL}/meta.json`,
   ).pipe(
     switchMap((it) => it.json()),
     shareReplay({ bufferSize: 1, refCount: true }),
   );
 
-  public readonly posts$: Observable<Array<Post>> = fromFetch(
+  readonly posts$: Observable<Array<Post>> = fromFetch(
     `${import.meta.env.BASE_URL}/posts.json`,
   ).pipe(
     switchMap((it) => it.json()),
     shareReplay({ bufferSize: 1, refCount: true }),
   );
 
-  public readonly load$ = combineLatest({
-    meta: this.meta$,
-    posts: this.posts$,
-  });
+  constructor() {
+    combineLatest([this.meta$, this.posts$]).subscribe({
+      error: (err) => console.warn("failed to load tumblr data", err),
+    });
+  }
 }

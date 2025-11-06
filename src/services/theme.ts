@@ -1,23 +1,20 @@
 import { createContext } from "@lit/context";
 import { constant, either, type Decoder } from "decoders";
-import { BehaviorSubject, shareReplay, tap } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 
 export const themeContext = createContext<Theme>("theme");
 
-type ThemeOptions = "light" | "dark";
+type Themes = "light" | "dark";
 
 const STORAGE_KEY = "app-theme";
 
-const decoder: Decoder<ThemeOptions> = either(
-  constant("light"),
-  constant("dark"),
-);
+const decoder: Decoder<Themes> = either(constant("light"), constant("dark"));
 
-function localStorageValue(): ThemeOptions | undefined {
+function localStorageValue(): Themes | undefined {
   return decoder.value(localStorage.getItem(STORAGE_KEY));
 }
 
-function userAgentValue(): ThemeOptions {
+function userAgentValue(): Themes {
   if (
     window.matchMedia &&
     window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -28,27 +25,27 @@ function userAgentValue(): ThemeOptions {
 }
 
 export class Theme {
-  private readonly _theme = new BehaviorSubject<ThemeOptions>(
+  readonly #theme = new BehaviorSubject<Themes>(
     localStorageValue() ?? userAgentValue(),
   );
 
-  public readonly theme$ = this._theme.asObservable();
+  readonly theme$ = this.#theme.asObservable();
 
   toggle() {
-    this._theme.next(this._theme.getValue() === "dark" ? "light" : "dark");
+    this.#theme.next(this.#theme.getValue() === "dark" ? "light" : "dark");
   }
 
-  apply() {
-    return this.theme$.pipe(
-      tap((v) => {
+  constructor() {
+    this.theme$.subscribe({
+      next: (v) => {
         localStorage.setItem(STORAGE_KEY, v);
-        if (v === "light") {
+        if (v === "dark") {
+          document.documentElement.classList.add("sl-theme-dark");
+        } else {
           document.documentElement.classList.remove("sl-theme-dark");
-          return;
         }
-        document.documentElement.classList.add("sl-theme-dark");
-      }),
-      shareReplay({ bufferSize: 1, refCount: true }),
-    );
+      },
+      error: (err) => console.warn("failed to apply theme", { err }),
+    });
   }
 }

@@ -21,9 +21,9 @@ export function observe<Proto extends LitElement, Field extends keyof Proto>(
     };
 
     proto.disconnectedCallback = function () {
-      disconnectedCallback.call(this);
       unsub.next();
       unsub.complete();
+      disconnectedCallback.call(this);
     };
   };
 }
