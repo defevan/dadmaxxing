@@ -7,6 +7,7 @@ import { AppElement } from "../lib/element";
 import { observe } from "../lib/observe-decorator";
 import { Blog, blogContext } from "../services/blog";
 import { AppRouter, routerContext } from "../services/router";
+import { Theme, themeContext } from "../services/theme";
 import "./app.scss";
 
 @customElement("app-root")
@@ -38,6 +39,12 @@ export class RootElement extends AppElement {
       render: () => html`<app-post-list tags=${[]}></app-post-list>`,
     },
   ]);
+
+  @provide({ context: themeContext })
+  theme = new Theme();
+
+  @observe((self) => self.theme.apply())
+  applyTheme?: unknown;
 
   @provide({ context: blogContext })
   blog = new Blog();

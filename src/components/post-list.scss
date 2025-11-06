@@ -1,20 +1,20 @@
 app-post-list {
-  article {
-    background-color: var(--card-bg);
-    padding: var(--gutter);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
+  sl-card {
+    display: block;
 
-    figure {
-      margin: 0;
+    [slot="header"] {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
-      video,
-      img {
-        width: 100%;
-        border-radius: var(--border-radius);
-        background-color: black;
+      a {
+        color: initial;
       }
     }
+  }
+
+  figure {
+    margin: 0;
   }
 
   ul {
@@ -24,64 +24,12 @@ app-post-list {
   }
 
   li {
-    margin-bottom: var(--gutter);
-
-    &:last-of-type {
-      margin-bottom: 0;
-    }
-  }
-
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    a {
-      color: var(--text-muted);
-      text-decoration: none;
-
-      &:visited {
-        color: var(--text-muted);
-      }
-
-      &:hover {
-        color: var(--text-primary);
-        text-decoration: underline;
-      }
-    }
-  }
-
-  footer {
-    a {
-      text-decoration: none;
-      display: inline-block;
-      border-radius: 99999px;
-      background: var(--pill-bg);
-      padding: calc(var(--spacing-unit) / 2) var(--spacing-unit);
-      color: var(--text-muted);
-      margin-right: var(--spacing-unit);
-
-      &:last-of-type {
-        margin-right: 0;
-      }
-
-      &:hover {
-        background: var(--pill-bg-hover);
-      }
-    }
-  }
-
-  time {
-    color: var(--text-muted);
+    margin: var(--sl-spacing-4x-large) 0;
   }
 
   .empty {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-
-  section {
-    margin: var(--gutter) 0;
   }
 }

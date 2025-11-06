@@ -16,12 +16,22 @@ export class FooterElement extends AppElement {
   meta?: Meta;
 
   render() {
-    const updated = this.meta
-      ? new Date(this.meta.updated * 1000).toLocaleString()
-      : "...";
+    const seconds = this.meta?.updated ?? 0;
+    const date = new Date(seconds * 1000).toISOString();
     return html`
       <footer>
-        <small> Last updated at ${updated} </small>
+        <div>
+          <span>Last updated on</span>
+          <sl-format-date
+            month="long"
+            day="numeric"
+            year="numeric"
+            date=${date}
+          ></sl-format-date>
+        </div>
+        <div>
+          <sl-button @click=${() => window.scrollTo(0, 0)}>scroll up</sl-button>
+        </div>
       </footer>
     `;
   }

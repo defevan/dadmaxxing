@@ -78,27 +78,41 @@ export class PostListElement extends AppElement {
 
   renderPost(post: Post) {
     const date = new Date(post.date);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const datetime = `${year}-${month}-${day}`;
+    const url = `${location.origin}${location.pathname}#${post.id}`;
     return html`
-      <li>
-        <article tabindex="0" id=${post.id}>
-          <header>
-            <time datetime=${datetime}>${date.toLocaleString()}</time>
-            <a href=${`#${post.id}`}>Link</a>
-          </header>
-          <app-post-body body=${post.body}></app-post-body>
-          <footer>${post.tags.map((tag) => this.renderTag(tag))}</footer>
-        </article>
+      <li tabindex="0" id=${post.id}>
+        <sl-card>
+          <div slot="header">
+            <sl-format-date
+              month="long"
+              day="numeric"
+              year="numeric"
+              date=${date.toISOString()}
+            ></sl-format-date>
+            <a href=${`#${post.id}`}>
+              <sl-copy-button value=${url}></sl-copy-button>
+            </a>
+          </div>
+          <slot>
+            <app-post-body body=${post.body}></app-post-body>
+          </slot>
+          <div slot="footer">
+            ${post.tags.map((tag) => this.renderTag(tag))}
+          </div>
+        </sl-card>
       </li>
+
+      <li></li>
     `;
   }
 
   renderTag(tag: string) {
     const href = `${import.meta.env.BASE_URL}/${tag}`;
     const text = `#${tag}`;
-    return html` <a href=${href}>${text}</a> `;
+    return html`
+      <a href=${href}>
+        <sl-tag pill>${text}</sl-tag>
+      </a>
+    `;
   }
 }

@@ -7,6 +7,7 @@ import { AppElement } from "../lib/element";
 import { observe } from "../lib/observe-decorator";
 import { Blog, blogContext } from "../services/blog";
 import { AppRouter, routerContext } from "../services/router";
+import { Theme, themeContext } from "../services/theme";
 import "./header.scss";
 
 type Link = {
@@ -31,11 +32,17 @@ export class HeaderElement extends AppElement {
   @consume({ context: routerContext })
   router!: AppRouter;
 
+  @consume({ context: themeContext })
+  theme!: Theme;
+
   @observe((self) => self.blog.meta$)
   meta?: Meta;
 
   @observe((self) => self.router.pathname$)
   pathname?: string;
+
+  @observe((self) => self.theme.theme$)
+  activeTheme?: "light" | "dark";
 
   render() {
     const p = this.meta
@@ -47,7 +54,16 @@ export class HeaderElement extends AppElement {
           <h1>${this.meta?.title ?? "..."}</h1>
           ${p}
         </div>
-        <nav>${links.map((link) => this.renderLink(link))}</nav>
+        <div>
+          <nav>${links.map((link) => this.renderLink(link))}</nav>
+          <div class="switch-container">
+            <sl-switch
+              ?checked=${this.activeTheme === "dark"}
+              @sl-change=${() => this.theme.toggle()}
+              >dark mode</sl-switch
+            >
+          </div>
+        </div>
       </header>
     `;
   }

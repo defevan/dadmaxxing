@@ -1,12 +1,8 @@
 app-header {
   header {
-    background: var(--header-bg);
-    color: var(--text-muted);
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-unit) var(--gutter);
   }
 
   h1,
@@ -15,45 +11,26 @@ app-header {
     padding: 0;
   }
 
-  h1 {
-    margin-bottom: 0;
-  }
+  nav {
+    a {
+      color: initial;
+      text-decoration: none;
+      margin-right: var(--sl-spacing-small);
+      display: inline-block;
 
-  a {
-    margin-right: var(--spacing-unit);
-    color: var(--text-muted);
-    text-decoration: none;
+      &[active],
+      &:hover {
+        text-decoration: underline;
+      }
 
-    &:last-of-type {
-      margin-right: 0;
-    }
-
-    &:visited {
-      color: var(--text-muted);
-    }
-
-    &[active] {
-      color: var(--text-primary);
-    }
-
-    &:hover {
-      text-decoration: underline;
-      color: var(--text-primary);
+      &:last-of-type {
+        margin-right: 0;
+      }
     }
   }
 
-  a {
-    color: var(--text-muted);
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-      color: var(--text-primary);
-    }
-  }
-
-  a {
-    display: inline-block;
+  .switch-container {
+    text-align: right;
   }
 
   @media (max-width: 1000px) {
@@ -61,7 +38,11 @@ app-header {
       display: block;
 
       p {
-        margin-bottom: var(--spacing-unit);
+        margin-bottom: var(--sl-spacing-small);
+      }
+
+      .switch-container {
+        text-align: left;
       }
     }
   }
