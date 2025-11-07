@@ -1,12 +1,8 @@
-import { flow } from "@lit-labs/virtualizer/layouts/flow.js";
-import {
-  virtualize,
-  virtualizerRef,
-  type VirtualizerHostElement,
-} from "@lit-labs/virtualizer/virtualize.js";
 import { consume } from "@lit/context";
+import type { SlCard } from "@shoelace-style/shoelace";
 import { html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, queryAll } from "lit/decorators.js";
+import { repeat } from "lit/directives/repeat.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { tap } from "rxjs/operators";
 import { type Post } from "../../shared/types";
@@ -50,17 +46,12 @@ export class PostBodyElement extends AppElement {
   node?: unknown;
 
   render() {
-    return html` <section>${unsafeHTML(this.body)}</section> `;
+    return unsafeHTML(this.body);
   }
 }
 
 @customElement("app-post-list")
 export class PostListElement extends AppElement {
-  /**
-   * set by virtualize directive
-   */
-  [virtualizerRef]?: VirtualizerHostElement[typeof virtualizerRef];
-
   @consume({ context: blogContext })
   blog!: Blog;
 
@@ -82,9 +73,12 @@ export class PostListElement extends AppElement {
     );
   }
 
+  @queryAll("sl-card")
+  cards?: NodeListOf<SlCard>;
+
   scrollToPost(id: string): void {
     const idx = this.#filtered().findIndex((post) => post.id === id);
-    this[virtualizerRef]?.element(idx)?.scrollIntoView();
+    this.cards?.item(idx).scrollIntoView();
   }
 
   render() {
@@ -92,12 +86,11 @@ export class PostListElement extends AppElement {
     if (posts.length < 1 && Array.isArray(this.posts)) {
       return html` <div class="empty">(⁎˃ᆺ˂) 404</div> `;
     }
-    return virtualize({
-      layout: flow({ direction: "vertical" }),
-      items: posts,
-      keyFunction: (post) => post.id,
-      renderItem: (post) => this.#renderPost(post),
-    });
+    return repeat(
+      posts,
+      (post) => post.id,
+      (post) => this.#renderPost(post),
+    );
   }
 
   #renderPost(post: Post) {

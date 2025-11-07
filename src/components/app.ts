@@ -89,7 +89,11 @@ export class RootElement extends AppElement {
       delayWhen(() => mkIdleObservable()),
       tap(() => {
         const id = location.hash.replace(/^#/, "");
-        self.list.value?.scrollToPost(id);
+        if (id) {
+          self.list.value?.scrollToPost(id);
+        } else {
+          window.scrollTo(0, 0);
+        }
       }),
     ),
   )
