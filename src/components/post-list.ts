@@ -19,7 +19,7 @@ import "./post-list.scss";
 
 @customElement("app-post-body")
 export class PostBodyElement extends AppElement {
-  @property({ attribute: true })
+  @property()
   body: string = "";
 
   /**
@@ -70,7 +70,7 @@ export class PostListElement extends AppElement {
   @observe((self) => self.blog.posts$)
   posts?: Array<Post>;
 
-  @property({ attribute: true })
+  @property()
   tags: Array<string> = [];
 
   #filtered(): Array<Post> {
@@ -118,7 +118,7 @@ export class PostListElement extends AppElement {
             </a>
           </div>
           <slot>
-            <app-post-body body=${post.body}></app-post-body>
+            <app-post-body .body=${post.body}></app-post-body>
           </slot>
           <div slot="footer">
             ${post.tags.map((tag) => this.#renderTag(tag))}

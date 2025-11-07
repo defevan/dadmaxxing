@@ -1,28 +1,25 @@
 import type { LitElement } from "lit";
-import { Subject, takeUntil, type Observable } from "rxjs";
+import type { Observable, Subscription } from "rxjs";
 
 export function observe<Proto extends LitElement, Field extends keyof Proto>(
   factory: (arg: Proto) => Observable<Proto[Field]>,
 ) {
   return function (proto: Proto, key: Field) {
-    const unsub = new Subject<void>();
+    let sub: Subscription | undefined = undefined;
 
     const connectedCallback = proto.connectedCallback;
     const disconnectedCallback = proto.disconnectedCallback;
 
     proto.connectedCallback = function () {
       connectedCallback.call(this);
-      factory(this)
-        .pipe(takeUntil(unsub))
-        .subscribe((value) => {
-          this[key] = value;
-          this.requestUpdate();
-        });
+      sub = factory(this).subscribe((value) => {
+        this[key] = value;
+        this.requestUpdate();
+      });
     };
 
     proto.disconnectedCallback = function () {
-      unsub.next();
-      unsub.complete();
+      sub?.unsubscribe();
       disconnectedCallback.call(this);
     };
   };
