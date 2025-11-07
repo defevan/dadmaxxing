@@ -4,12 +4,12 @@ import { html } from "lit";
 import { customElement, property, queryAll } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
+import { of, type Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 import { type Post } from "../../shared/types";
 import { AppElement } from "../lib/element";
 import { mkMutationObservable } from "../lib/mutation-observable";
 import { observe } from "../lib/observe-decorator";
-import { Blog, blogContext } from "../services/blog";
 import { AppRouter, routerContext } from "../services/router";
 import "./post-list.scss";
 
@@ -52,42 +52,29 @@ export class PostBodyElement extends AppElement {
 
 @customElement("app-post-list")
 export class PostListElement extends AppElement {
-  @consume({ context: blogContext })
-  blog!: Blog;
-
   @consume({ context: routerContext })
   router!: AppRouter;
 
-  @observe((self) => self.blog.posts$)
-  posts?: Array<Post>;
-
   @property()
-  tags: Array<string> = [];
+  posts$: Observable<Array<Post>> = of([]);
 
-  #filtered(): Array<Post> {
-    if (!this.posts) {
-      return [];
-    }
-    return this.posts.filter((p) =>
-      p.tags.some((tag) => this.tags.includes(tag)),
-    );
-  }
+  @observe((self) => self.posts$)
+  posts: Array<Post> = [];
 
   @queryAll("sl-card")
   cards?: NodeListOf<SlCard>;
 
   scrollToPost(id: string): void {
-    const idx = this.#filtered().findIndex((post) => post.id === id);
+    const idx = this.posts?.findIndex((post) => post.id === id);
     this.cards?.item(idx).scrollIntoView();
   }
 
   render() {
-    const posts = this.#filtered();
-    if (posts.length < 1 && Array.isArray(this.posts)) {
+    if (this.posts.length < 1 && Array.isArray(this.posts)) {
       return html` <div class="empty">(⁎˃ᆺ˂) 404</div> `;
     }
     return repeat(
-      posts,
+      this.posts,
       (post) => post.id,
       (post) => this.#renderPost(post),
     );

@@ -17,51 +17,69 @@ import { PostListElement } from "./post-list";
 export class RootElement extends AppElement {
   list = createRef<PostListElement>();
 
-  @provide({ context: routerContext })
-  router = new AppRouter(this, [
-    {
-      path: `${import.meta.env.BASE_URL}{/}?`,
-      render: () => html`
-        <app-post-list ${ref(this.list)} .tags=${homeTags}></app-post-list>
-      `,
-    },
-    {
-      path: `${import.meta.env.BASE_URL}/family{/}?`,
-      render: () => html`
-        <app-post-list ${ref(this.list)} .tags=${["family"]}></app-post-list>
-      `,
-    },
-    {
-      path: `${import.meta.env.BASE_URL}/climbing{/}?`,
-      render: () => html`
-        <app-post-list ${ref(this.list)} .tags=${["climbing"]}></app-post-list>
-      `,
-    },
-    {
-      path: `${import.meta.env.BASE_URL}/gaming{/}?`,
-      render: () => html`
-        <app-post-list ${ref(this.list)} .tags=${["gaming"]}></app-post-list>
-      `,
-    },
-    {
-      path: `${import.meta.env.BASE_URL}/anime{/}?`,
-      render: () => html`
-        <app-post-list ${ref(this.list)} .tags=${["anime"]}></app-post-list>
-      `,
-    },
-    {
-      path: `${import.meta.env.BASE_URL}/*`,
-      render: () => html`
-        <app-post-list ${ref(this.list)} .tags=${[]}></app-post-list>
-      `,
-    },
-  ]);
-
   @provide({ context: themeContext })
   theme = new Theme();
 
   @provide({ context: blogContext })
   blog = new Blog();
+
+  @provide({ context: routerContext })
+  router = new AppRouter(this, [
+    {
+      path: `${import.meta.env.BASE_URL}{/}?`,
+      render: () => html`
+        <app-post-list
+          ${ref(this.list)}
+          .posts$=${this.blog.posts(homeTags)}
+        ></app-post-list>
+      `,
+    },
+    {
+      path: `${import.meta.env.BASE_URL}/family{/}?`,
+      render: () => html`
+        <app-post-list
+          ${ref(this.list)}
+          .posts$=${this.blog.posts(["family"])}
+        ></app-post-list>
+      `,
+    },
+    {
+      path: `${import.meta.env.BASE_URL}/climbing{/}?`,
+      render: () => html`
+        <app-post-list
+          ${ref(this.list)}
+          .posts$=${this.blog.posts(["climbing"])}
+        ></app-post-list>
+      `,
+    },
+    {
+      path: `${import.meta.env.BASE_URL}/gaming{/}?`,
+      render: () => html`
+        <app-post-list
+          ${ref(this.list)}
+          .posts$=${this.blog.posts(["gaming"])}
+        ></app-post-list>
+      `,
+    },
+    {
+      path: `${import.meta.env.BASE_URL}/anime{/}?`,
+      render: () => html`
+        <app-post-list
+          ${ref(this.list)}
+          .posts$=${this.blog.posts(["anime"])}
+        ></app-post-list>
+      `,
+    },
+    {
+      path: `${import.meta.env.BASE_URL}/*`,
+      render: () => html`
+        <app-post-list
+          ${ref(this.list)}
+          .posts$=${this.blog.posts([])}
+        ></app-post-list>
+      `,
+    },
+  ]);
 
   /**
    * Set document title and favicon when blog meta data has loaded.
@@ -77,7 +95,7 @@ export class RootElement extends AppElement {
       }),
     ),
   )
-  meta?: unknown;
+  documentMeta?: unknown;
 
   @observe((self) =>
     self.router.pathname$.pipe(

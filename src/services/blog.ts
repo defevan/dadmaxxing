@@ -1,7 +1,7 @@
 import { createContext } from "@lit/context";
 import { combineLatest, Observable } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
-import { shareReplay, switchMap } from "rxjs/operators";
+import { map, shareReplay, switchMap } from "rxjs/operators";
 import type { Meta, Post } from "../../shared/types";
 
 export const blogContext = createContext<Blog>("blog");
@@ -14,15 +14,21 @@ export class Blog {
     shareReplay({ bufferSize: 1, refCount: true }),
   );
 
-  readonly posts$: Observable<Array<Post>> = fromFetch(
+  readonly #posts$: Observable<Array<Post>> = fromFetch(
     `${import.meta.env.BASE_URL}/posts.json`,
   ).pipe(
     switchMap((it) => it.json()),
     shareReplay({ bufferSize: 1, refCount: true }),
   );
 
+  posts(tags: Array<string>) {
+    return this.#posts$.pipe(
+      map((posts) => posts.filter((p) => p.tags.some((t) => tags.includes(t)))),
+    );
+  }
+
   constructor() {
-    combineLatest([this.meta$, this.posts$]).subscribe({
+    combineLatest([this.meta$, this.#posts$]).subscribe({
       error: (err) => console.warn("failed to load tumblr data", err),
     });
   }
