@@ -1746,7 +1746,7 @@ ${i}`);return r.name="Decoding error",r}else return i}function F(e){function t(u
             </a>
           </div>
           <slot>
-            <app-post-body body=${e.body}></app-post-body>
+            <app-post-body .body=${e.body}></app-post-body>
           </slot>
           <div slot="footer">
             ${e.tags.map(r=>ei(this,re,jn).call(this,r))}
@@ -1758,17 +1758,17 @@ ${i}`);return r.name="Decoding error",r}else return i}function F(e){function t(u
         <sl-tag pill>${i}</sl-tag>
       </a>
     `};Lt([_e({context:Ei})],pe.prototype,"blog",2);Lt([_e({context:Vr})],pe.prototype,"router",2);Lt([Mt(e=>e.blog.posts$)],pe.prototype,"posts",2);Lt([g()],pe.prototype,"tags",2);pe=Lt([De("app-post-list")],pe);var zu=Object.defineProperty,Pu=Object.getOwnPropertyDescriptor,we=(e,t,i,r)=>{for(var o=r>1?void 0:r?Pu(t,i):t,s=e.length-1,n;s>=0;s--)(n=e[s])&&(o=(r?n(t,i,o):n(o))||o);return r&&o&&zu(t,i,o),o};let Wt=class extends Fe{constructor(){super(...arguments),this.list=ac(),this.router=new Qh(this,[{path:"/dadmaxxing{/}?",render:()=>k`
-        <app-post-list ${Jt(this.list)} tags=${jh}></app-post-list>
+        <app-post-list ${Jt(this.list)} .tags=${jh}></app-post-list>
       `},{path:"/dadmaxxing/family{/}?",render:()=>k`
-        <app-post-list ${Jt(this.list)} tags=${["family"]}></app-post-list>
+        <app-post-list ${Jt(this.list)} .tags=${["family"]}></app-post-list>
       `},{path:"/dadmaxxing/climbing{/}?",render:()=>k`
-        <app-post-list ${Jt(this.list)} tags=${["climbing"]}></app-post-list>
+        <app-post-list ${Jt(this.list)} .tags=${["climbing"]}></app-post-list>
       `},{path:"/dadmaxxing/gaming{/}?",render:()=>k`
-        <app-post-list ${Jt(this.list)} tags=${["gaming"]}></app-post-list>
+        <app-post-list ${Jt(this.list)} .tags=${["gaming"]}></app-post-list>
       `},{path:"/dadmaxxing/anime{/}?",render:()=>k`
-        <app-post-list ${Jt(this.list)} tags=${["anime"]}></app-post-list>
+        <app-post-list ${Jt(this.list)} .tags=${["anime"]}></app-post-list>
       `},{path:"/dadmaxxing/*",render:()=>k`
-        <app-post-list ${Jt(this.list)} tags=${[]}></app-post-list>
+        <app-post-list ${Jt(this.list)} .tags=${[]}></app-post-list>
       `}]),this.theme=new ru,this.blog=new Yh}render(){return k`
       <main>
         <div>
