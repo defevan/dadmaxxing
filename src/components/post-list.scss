@@ -14,7 +14,6 @@ app-post-list {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: var(--sl-spacing-large);
 
         a {
           color: inherit;
@@ -22,10 +21,19 @@ app-post-list {
       }
 
       .card-header,
-      .card-body,
       .card-footer {
         margin-left: var(--sl-spacing-large);
         margin-right: var(--sl-spacing-large);
+      }
+
+      .card-body {
+        margin: var(--sl-spacing-large);
+
+        app-post-body {
+          :last-child {
+            margin-bottom: 0;
+          }
+        }
       }
 
       figure {

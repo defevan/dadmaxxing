@@ -4,10 +4,8 @@ import { customElement, property, queryAll } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { EMPTY, type Observable } from "rxjs";
-import { tap } from "rxjs/operators";
 import { type Post } from "../../shared/types";
 import { AppElement } from "../lib/element";
-import { mkMutationObservable } from "../lib/mutation-observable";
 import { observe } from "../lib/observe-decorator";
 import { AppRouter, routerContext } from "../services/router";
 import "./post-list.scss";
@@ -17,35 +15,26 @@ export class PostBodyElement extends AppElement {
   @property()
   body: string = "";
 
-  /**
-   * Set aspect-ratio on content img/video tags.
-   */
-  @observe((self) =>
-    mkMutationObservable(self).pipe(
-      tap(() => {
-        const medias = [...self.querySelectorAll("figure")].flatMap((fig) => {
-          const h = parseFloat(fig.getAttribute("data-orig-height") ?? "");
-          const w = parseFloat(fig.getAttribute("data-orig-width") ?? "");
-          const medias = [
-            ...fig.querySelectorAll("img"),
-            ...fig.querySelectorAll("video"),
-          ];
-          return medias.map((media) => ({ media, h, w }));
-        });
-        for (const { media, h, w } of medias) {
-          if (isNaN(h) || isNaN(w)) {
-            console.warn("failed to set img/video aspect ratio");
-            continue;
-          }
-          media.style.aspectRatio = `${w} / ${h}`;
-        }
-      }),
-    ),
-  )
-  node?: unknown;
-
   render() {
-    return unsafeHTML(this.body);
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(this.body, "text/html");
+    for (const fig of doc.querySelectorAll("figure")) {
+      const h = parseFloat(fig.getAttribute("data-orig-height") ?? "");
+      const w = parseFloat(fig.getAttribute("data-orig-width") ?? "");
+      if (isNaN(h) || isNaN(w)) {
+        console.warn("failed to set img/video aspect ratio");
+        continue;
+      }
+      const medias = [
+        ...fig.querySelectorAll("img"),
+        ...fig.querySelectorAll("video"),
+      ];
+      for (const media of medias) {
+        media.style.aspectRatio = `${w} / ${h}`;
+        media.style.backgroundColor = "rgba(128, 128, 128, 0.1)";
+      }
+    }
+    return unsafeHTML(doc.body.innerHTML);
   }
 }
 
