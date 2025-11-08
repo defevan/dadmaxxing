@@ -23,7 +23,11 @@ body {
     app-header,
     app-footer {
       display: block;
-      padding: var(--sl-spacing-small) var(--sl-spacing-medium);
+      padding: var(--sl-spacing-medium);
     }
+  }
+
+  sl-divider {
+    margin: 0;
   }
 }
