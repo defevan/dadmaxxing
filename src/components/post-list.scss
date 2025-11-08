@@ -9,6 +9,7 @@ app-post-list {
       width: 100%;
       max-width: var(--max-width);
       margin: 0 auto;
+      padding: var(--sl-spacing-large) 0;
 
       .card-header {
         display: flex;
@@ -46,5 +47,11 @@ app-post-list {
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  @media (max-width: 1000px) {
+    .card-container {
+      margin: 0;
+    }
   }
 }
