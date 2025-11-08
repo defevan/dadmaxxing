@@ -21,6 +21,13 @@ app-post-list {
         }
       }
 
+      .card-header,
+      .card-body,
+      .card-footer {
+        margin-left: var(--sl-spacing-large);
+        margin-right: var(--sl-spacing-large);
+      }
+
       figure {
         margin: 0;
       }
