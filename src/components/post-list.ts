@@ -109,18 +109,24 @@ function renderPost(post: Post) {
         <div class="card-body">
           <app-post-body .body=${post.body}></app-post-body>
         </div>
-        <div class="card-footer">${post.tags.map((tag) => renderTag(tag))}</div>
+        <div class="card-footer">${renderTags(post.tags)}</div>
       </div>
     </div>
   `;
 }
 
-function renderTag(tag: string) {
-  const href = `${import.meta.env.BASE_URL}/${tag}`;
-  const text = `#${tag}`;
-  return html`
-    <a href=${href}>
-      <sl-tag pill>${text}</sl-tag>
-    </a>
-  `;
+function renderTags(tags: Array<string>) {
+  return repeat(
+    tags,
+    (tag) => tag,
+    (tag) => {
+      const href = `${import.meta.env.BASE_URL}/${tag}`;
+      const text = `#${tag}`;
+      return html`
+        <a href=${href}>
+          <sl-tag pill>${text}</sl-tag>
+        </a>
+      `;
+    },
+  );
 }
