@@ -4,19 +4,20 @@ app-post-list {
     width: 100%;
     margin: var(--sl-spacing-4x-large) 0;
 
-    sl-card {
+    .card {
       display: block;
       width: 100%;
       max-width: var(--max-width);
       margin: 0 auto;
 
-      [slot="header"] {
+      .card-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-bottom: var(--sl-spacing-large);
 
         a {
-          color: initial;
+          color: inherit;
         }
       }
 

@@ -1,10 +1,9 @@
 import { consume } from "@lit/context";
-import type { SlCard } from "@shoelace-style/shoelace";
 import { html } from "lit";
 import { customElement, property, queryAll } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
-import { of, type Observable } from "rxjs";
+import { EMPTY, type Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 import { type Post } from "../../shared/types";
 import { AppElement } from "../lib/element";
@@ -56,65 +55,72 @@ export class PostListElement extends AppElement {
   router!: AppRouter;
 
   @property()
-  posts$: Observable<Array<Post>> = of([]);
+  posts$: Observable<Array<Post>> = EMPTY;
 
   @observe((self) => self.posts$)
-  posts: Array<Post> = [];
+  posts?: Array<Post>;
 
-  @queryAll("sl-card")
-  cards?: NodeListOf<SlCard>;
+  @queryAll("div[id].card")
+  cards?: NodeListOf<HTMLDivElement>;
 
   scrollToPost(id: string): void {
-    const idx = this.posts?.findIndex((post) => post.id === id);
+    const idx = this.posts?.findIndex((post) => post.id === id) ?? -1;
     this.cards?.item(idx).scrollIntoView();
   }
 
   render() {
+    if (!this.posts) {
+      // Loading.
+      return;
+    }
     if (this.posts.length < 1 && Array.isArray(this.posts)) {
       return html` <div class="empty">(⁎˃ᆺ˂) 404</div> `;
     }
-    return repeat(
+    const list = repeat(
       this.posts,
       (post) => post.id,
-      (post) => this.#renderPost(post),
+      (post) => renderPost(post),
     );
-  }
-
-  #renderPost(post: Post) {
-    const date = new Date(post.date);
-    const url = `${location.origin}${location.pathname}#${post.id}`;
     return html`
-      <div class="card-container">
-        <sl-card id=${post.id} tabindex="0">
-          <div slot="header">
-            <sl-format-date
-              month="long"
-              day="numeric"
-              year="numeric"
-              date=${date.toISOString()}
-            ></sl-format-date>
-            <a href=${`#${post.id}`}>
-              <sl-copy-button value=${url}></sl-copy-button>
-            </a>
-          </div>
-          <slot>
-            <app-post-body .body=${post.body}></app-post-body>
-          </slot>
-          <div slot="footer">
-            ${post.tags.map((tag) => this.#renderTag(tag))}
-          </div>
-        </sl-card>
+      ${list}
+      <sl-divider></sl-divider>
+    `;
+  }
+}
+
+function renderPost(post: Post) {
+  const date = new Date(post.date);
+  const url = `${location.origin}${location.pathname}#${post.id}`;
+  return html`
+    <sl-divider></sl-divider>
+    <div class="card-container">
+      <div id=${post.id} class="card" tabindex="0">
+        <div class="card-header">
+          <sl-format-date
+            month="long"
+            day="numeric"
+            year="numeric"
+            date=${date.toISOString()}
+          ></sl-format-date>
+          <a href=${`#${post.id}`} class="copy-link">
+            <sl-copy-button value=${url}></sl-copy-button>
+          </a>
+        </div>
+        <div class="card-body">
+          <app-post-body .body=${post.body}></app-post-body>
+        </div>
+        <div class="card-footer">${post.tags.map((tag) => renderTag(tag))}</div>
       </div>
-    `;
-  }
+    </div>
+  `;
+}
 
-  #renderTag(tag: string) {
-    const href = `${import.meta.env.BASE_URL}/${tag}`;
-    const text = `#${tag}`;
-    return html`
-      <a href=${href}>
-        <sl-tag pill>${text}</sl-tag>
-      </a>
-    `;
-  }
+function renderTag(tag: string) {
+  const href = `${import.meta.env.BASE_URL}/${tag}`;
+  const text = `#${tag}`;
+  return html`
+    <a href=${href}>
+      <sl-tag pill>${text}</sl-tag>
+    </a>
+  `;
 }
