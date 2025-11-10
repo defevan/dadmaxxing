@@ -15,8 +15,6 @@ import {
 
 export const includedTags = ["family", "climbing", "gaming", "anime"];
 
-export const homeTags = ["family", "climbing"];
-
 // Mostly generated types/decoders for interacting with Tumblr's API.
 
 type Avatar = {
