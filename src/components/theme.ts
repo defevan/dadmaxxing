@@ -6,7 +6,7 @@ import "./theme.scss";
 
 @customElement("app-theme")
 export class ThemeElement extends SignalWatcher(AppElement) {
-  @property()
+  @property({ attribute: false })
   activeTheme?: Signal.State<ThemeValue>;
 
   updated() {

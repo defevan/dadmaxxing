@@ -8,7 +8,7 @@ import "./footer.scss";
 
 @customElement("app-footer")
 export class FooterElement extends SignalWatcher(AppElement) {
-  @property()
+  @property({ attribute: false })
   meta?: State<Promise<Meta>>;
 
   render() {

@@ -47,6 +47,8 @@ app-post-list {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: var(--sl-spacing-large);
+    text-align: center;
   }
 
   @media (max-width: 1000px) {

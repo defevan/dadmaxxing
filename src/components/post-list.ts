@@ -16,10 +16,10 @@ export class CardsEvent extends CustomEvent<NodeListOf<Element>> {
 
 @customElement("app-post-list")
 export class PostListElement extends SignalWatcher(AppElement) {
-  @property()
+  @property({ attribute: false })
   tags?: Array<string>;
 
-  @property()
+  @property({ attribute: false })
   posts?: State<Promise<Post[]>>;
 
   updated() {

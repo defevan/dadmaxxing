@@ -20,16 +20,16 @@ const links = [
 
 @customElement("app-header")
 export class HeaderElement extends SignalWatcher(AppElement) {
-  @property()
+  @property({ attribute: false })
   pathname?: Signal.State<string | undefined>;
 
-  @property()
+  @property({ attribute: false })
   meta?: State<Promise<Meta>>;
 
-  @property()
+  @property({ attribute: false })
   activeTheme?: Signal.State<ThemeValue>;
 
-  @property()
+  @property({ attribute: false })
   toggleTheme?: () => void;
 
   typographyElements() {

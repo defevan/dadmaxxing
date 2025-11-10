@@ -8,7 +8,7 @@ import "./document.scss";
 
 @customElement("app-document")
 export class DocumentElement extends SignalWatcher(AppElement) {
-  @property()
+  @property({ attribute: false })
   meta?: State<Promise<Meta>>;
 
   updated() {

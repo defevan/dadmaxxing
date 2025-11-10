@@ -9,13 +9,13 @@ export class ScrollerElement extends SignalWatcher(AppElement) {
    * NOTE: unused but it's desired this component runs updated()
    * when this value is changed.
    */
-  @property()
+  @property({ attribute: false })
   pathname?: Signal.State<string | undefined>;
 
-  @property()
+  @property({ attribute: false })
   fragment?: Signal.State<string | undefined>;
 
-  @property()
+  @property({ attribute: false })
   cards?: Signal.State<NodeListOf<Element> | undefined>;
 
   async updated() {
