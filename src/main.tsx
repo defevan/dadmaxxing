@@ -1,6 +1,7 @@
 /**
  * polyfills
  */
+import "requestidlecallback-polyfill"; // for scrolling behavior
 import "urlpattern-polyfill"; // for lit router
 
 /**

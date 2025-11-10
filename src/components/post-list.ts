@@ -9,8 +9,11 @@ import { AppElement } from "../lib/element";
 import "./post-list.scss";
 
 export class CardsEvent extends CustomEvent<NodeListOf<Element>> {
-  constructor(detail: NodeListOf<Element>) {
-    super("cards", { detail });
+  constructor(
+    detail: NodeListOf<Element>,
+    eventInitDict: EventInit = { bubbles: true, composed: true },
+  ) {
+    super("cards", { ...eventInitDict, detail });
   }
 }
 
