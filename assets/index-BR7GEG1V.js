@@ -1699,11 +1699,7 @@ ${r}`);return o.name="Decoding error",o}else return r}function F(t){function e(h
       .activeTheme=${r}
       .toggleTheme=${o}
     ></app-header>
-  `}let ae=class extends Ht(Wt){getHeader(){switch(this.meta?.state){case"REJECTED":{const t=S`<h1>
-          error
-          <h1></h1>
-        </h1>`,e=S`<p>uh, big issue, failed to get the blog meta data</p>
-          <p></p>`;return{h1:t,p:e}}default:{const t=this.meta?.value?S`<h1>${this.meta.value.title}</h1>`:S`<h1>${jr("&nbsp;")}</h1>`,e=this.meta?.value?S`<p>${this.meta.value.description}</p>`:S`<p>${jr("&nbsp;")}</p>`;return{h1:t,p:e}}}}render(){const{h1:t,p:e}=this.getHeader(),r=Ur(zc,o=>o.href,o=>this.renderLink(o));return S`
+  `}let ae=class extends Ht(Wt){typographyElements(){switch(this.meta?.state){case"REJECTED":{const t=S`<h1>error</h1>`,e=S`<p>uh, big issue, failed to get the blog meta data</p>`;return{h1:t,p:e}}default:{const t=this.meta?.value?S`<h1>${this.meta.value.title}</h1>`:S`<h1>${jr("&nbsp;")}</h1>`,e=this.meta?.value?S`<p>${this.meta.value.description}</p>`:S`<p>${jr("&nbsp;")}</p>`;return{h1:t,p:e}}}}render(){const{h1:t,p:e}=this.typographyElements(),r=Ur(zc,o=>o.href,o=>this.renderLink(o));return S`
       <header>
         <div>${t} ${e}</div>
         <div>
