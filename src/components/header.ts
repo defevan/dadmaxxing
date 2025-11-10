@@ -58,15 +58,11 @@ export class HeaderElement extends SignalWatcher(AppElement) {
   @property()
   toggleTheme?: () => void;
 
-  getHeader() {
+  typographyElements() {
     switch (this.meta?.state) {
       case "REJECTED": {
-        const h1 = html`<h1>
-          error
-          <h1></h1>
-        </h1>`;
-        const p = html`<p>uh, big issue, failed to get the blog meta data</p>
-          <p></p>`;
+        const h1 = html`<h1>error</h1>`;
+        const p = html`<p>uh, big issue, failed to get the blog meta data</p>`;
         return { h1, p };
       }
       default: {
@@ -82,7 +78,7 @@ export class HeaderElement extends SignalWatcher(AppElement) {
   }
 
   render() {
-    const { h1, p } = this.getHeader();
+    const { h1, p } = this.typographyElements();
     const navLinks = repeat(
       links,
       (link) => link.href,
