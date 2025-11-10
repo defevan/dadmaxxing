@@ -37,15 +37,20 @@ export class ScrollerElement extends SignalWatcher(AppElement) {
   @property()
   cards?: Signal.State<NodeListOf<Element> | undefined>;
 
-  updated() {
+  async updated() {
     const fragment = this.fragment?.get();
     const cards = this.cards?.get();
     if (!cards || cards.length < 1) {
       return;
     }
     const card = Array.from(cards).find((c) => c.id === fragment);
+    await new Promise(requestAnimationFrame);
     if (card) {
-      card.scrollIntoView();
+      card.scrollIntoView({
+        behavior: "auto",
+        block: "start",
+        inline: "nearest",
+      });
     } else {
       window.scrollTo(0, 0);
     }
