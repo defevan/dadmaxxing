@@ -1,26 +1,7 @@
 import { Signal, SignalWatcher } from "@lit-labs/signals";
-import { html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { AppElement } from "../lib/element";
 import "./scroller.scss";
-
-export function renderScroller({
-  pathname,
-  fragment,
-  cards,
-}: {
-  pathname: Signal.State<string | undefined>;
-  fragment: Signal.State<string | undefined>;
-  cards: Signal.State<NodeListOf<Element> | undefined>;
-}) {
-  return html`
-    <app-scroller
-      .pathname=${pathname}
-      .fragment=${fragment}
-      .cards=${cards}
-    ></app-scroller>
-  `;
-}
 
 @customElement("app-scroller")
 export class ScrollerElement extends SignalWatcher(AppElement) {

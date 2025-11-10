@@ -6,10 +6,6 @@ import type { Meta } from "../../shared/types";
 import { AppElement } from "../lib/element";
 import "./document.scss";
 
-export function renderDocument({ meta }: { meta: State<Promise<Meta>> }) {
-  return html`<app-document .meta=${meta}></app-document>`;
-}
-
 @customElement("app-document")
 export class DocumentElement extends SignalWatcher(AppElement) {
   @property()
@@ -24,7 +20,7 @@ export class DocumentElement extends SignalWatcher(AppElement) {
       case "RESOLVED": {
         document.title = this.meta.value?.title ?? "";
         render(
-          html`<link rel="icon" type="image/png" href=${this.meta.value?.avatar}></link>`,
+          html`<link rel="icon" type="image/png" href=${this.meta.value?.avatar ?? ""}></link>`,
           document.head,
         );
         return;

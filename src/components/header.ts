@@ -9,12 +9,7 @@ import { AppElement } from "../lib/element";
 import { type ThemeValue } from "../services/theme";
 import "./header.scss";
 
-type Link = {
-  label: string;
-  href: string;
-};
-
-const links: Array<Link> = [
+const links = [
   { label: `Home`, href: `${import.meta.env.BASE_URL}` },
   { label: `Family`, href: `${import.meta.env.BASE_URL}/family` },
   { label: `Climbing`, href: `${import.meta.env.BASE_URL}/climbing` },
@@ -22,27 +17,6 @@ const links: Array<Link> = [
   { label: `Anime`, href: `${import.meta.env.BASE_URL}/anime` },
   { label: `Source`, href: `https://github.com/defevan/dadmaxxing` },
 ];
-
-export function renderHeader({
-  pathname,
-  meta,
-  activeTheme,
-  toggleTheme,
-}: {
-  pathname: Signal.State<string | undefined>;
-  meta: State<Promise<Meta>>;
-  activeTheme: Signal.State<ThemeValue>;
-  toggleTheme: () => void;
-}) {
-  return html`
-    <app-header
-      .pathname=${pathname}
-      .meta=${meta}
-      .activeTheme=${activeTheme}
-      .toggleTheme=${toggleTheme}
-    ></app-header>
-  `;
-}
 
 @customElement("app-header")
 export class HeaderElement extends SignalWatcher(AppElement) {
@@ -101,7 +75,7 @@ export class HeaderElement extends SignalWatcher(AppElement) {
     `;
   }
 
-  renderLink({ href, label }: Link) {
+  renderLink({ href, label }: (typeof links)[number]) {
     if (href.includes("https://")) {
       return html`<a href=${href}>${label}</a>`;
     }

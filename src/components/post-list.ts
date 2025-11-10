@@ -8,35 +8,10 @@ import { type Post } from "../../shared/types";
 import { AppElement } from "../lib/element";
 import "./post-list.scss";
 
-class CardsEvent extends CustomEvent<NodeListOf<Element>> {
+export class CardsEvent extends CustomEvent<NodeListOf<Element>> {
   constructor(detail: NodeListOf<Element>) {
     super("cards", { detail });
   }
-}
-
-export function renderPostList({
-  tags,
-  posts,
-  handleCards,
-}: {
-  tags: Array<string>;
-  posts: State<Promise<Post[]>>;
-  handleCards: (evt: CardsEvent) => void;
-}) {
-  function handleCardsWrapper(evt: unknown) {
-    if (!(evt instanceof CardsEvent)) {
-      console.warn("received unknown event", evt);
-      return;
-    }
-    handleCards(evt);
-  }
-  return html`
-    <app-post-list
-      .tags=${tags}
-      .posts=${posts}
-      @cards=${handleCardsWrapper}
-    ></app-post-list>
-  `;
 }
 
 @customElement("app-post-list")

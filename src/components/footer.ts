@@ -6,10 +6,6 @@ import { type Meta } from "../../shared/types";
 import { AppElement } from "../lib/element";
 import "./footer.scss";
 
-export function renderFooter({ meta }: { meta: State<Promise<Meta>> }) {
-  return html` <app-footer .meta=${meta}></app-footer> `;
-}
-
 @customElement("app-footer")
 export class FooterElement extends SignalWatcher(AppElement) {
   @property()

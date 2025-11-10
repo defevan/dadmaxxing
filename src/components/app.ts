@@ -1,18 +1,12 @@
 import { signal, SignalWatcher } from "@lit-labs/signals";
 import { html } from "lit";
 import { customElement } from "lit/decorators.js";
-import { homeTags } from "../../shared/types";
 import { AppElement } from "../lib/element";
 import { Blog } from "../services/blog";
 import { AppRouter } from "../services/router";
 import { Theme } from "../services/theme";
 import "./app.scss";
-import { renderDocument } from "./document";
-import { renderFooter } from "./footer";
-import { renderHeader } from "./header";
-import { renderPostList } from "./post-list";
-import { renderScroller } from "./scroller";
-import { renderTheme } from "./theme";
+import { CardsEvent } from "./post-list";
 
 @customElement("app-root")
 export class RootElement extends SignalWatcher(AppElement) {
@@ -22,60 +16,70 @@ export class RootElement extends SignalWatcher(AppElement) {
 
   cards = signal<NodeListOf<Element> | undefined>(undefined);
 
+  handleCards(evt: CardsEvent) {
+    this.cards.set(evt.detail);
+  }
+
   router = new AppRouter(this, [
     {
       path: `${import.meta.env.BASE_URL}{/}?`,
-      render: () =>
-        renderPostList({
-          tags: homeTags,
-          posts: this.blog.posts,
-          handleCards: (evt) => this.cards.set(evt.detail),
-        }),
+      render: () => html`
+        <app-post-list
+          .tags=${["family", "climbing"]}
+          .posts=${this.blog.posts}
+          @cards=${this.handleCards}
+        ></app-post-list>
+      `,
     },
     {
       path: `${import.meta.env.BASE_URL}/family{/}?`,
-      render: () =>
-        renderPostList({
-          tags: ["family"],
-          posts: this.blog.posts,
-          handleCards: (evt) => this.cards.set(evt.detail),
-        }),
+      render: () => html`
+        <app-post-list
+          .tags=${["family"]}
+          .posts=${this.blog.posts}
+          @cards=${this.handleCards}
+        ></app-post-list>
+      `,
     },
     {
       path: `${import.meta.env.BASE_URL}/climbing{/}?`,
-      render: () =>
-        renderPostList({
-          tags: ["climbing"],
-          posts: this.blog.posts,
-          handleCards: (evt) => this.cards.set(evt.detail),
-        }),
+      render: () => html`
+        <app-post-list
+          .tags=${["climbing"]}
+          .posts=${this.blog.posts}
+          @cards=${this.handleCards}
+        ></app-post-list>
+      `,
     },
     {
       path: `${import.meta.env.BASE_URL}/gaming{/}?`,
-      render: () =>
-        renderPostList({
-          tags: ["gaming"],
-          posts: this.blog.posts,
-          handleCards: (evt) => this.cards.set(evt.detail),
-        }),
+      render: () => html`
+        <app-post-list
+          .tags=${["gaming"]}
+          .posts=${this.blog.posts}
+          @cards=${this.handleCards}
+        ></app-post-list>
+      `,
     },
     {
       path: `${import.meta.env.BASE_URL}/anime{/}?`,
-      render: () =>
-        renderPostList({
-          tags: ["anime"],
-          posts: this.blog.posts,
-          handleCards: (evt) => this.cards.set(evt.detail),
-        }),
+      render: () => html`
+        <app-post-list
+          .tags=${["anime"]}
+          .posts=${this.blog.posts}
+          @cards=${this.handleCards}
+        ></app-post-list>
+      `,
     },
     {
       path: `${import.meta.env.BASE_URL}/*`,
-      render: () =>
-        renderPostList({
-          tags: [],
-          posts: this.blog.posts,
-          handleCards: (evt) => this.cards.set(evt.detail),
-        }),
+      render: () => html`
+        <app-post-list
+          .tags=${[]}
+          .posts=${this.blog.posts}
+          @cards=${this.handleCards}
+        ></app-post-list>
+      `,
     },
   ]);
 
@@ -87,13 +91,23 @@ export class RootElement extends SignalWatcher(AppElement) {
     return html`
       <main>
         <div>
-          ${renderHeader({ pathname, meta, activeTheme, toggleTheme })}
+          <app-header
+            .pathname=${pathname}
+            .meta=${meta}
+            .activeTheme=${activeTheme}
+            .toggleTheme=${toggleTheme}
+          ></app-header>
           ${this.router.outlet()}
         </div>
-        ${renderFooter({ meta })}
+        <app-footer .meta=${meta}></app-footer>
       </main>
-      ${renderScroller({ pathname, fragment, cards })}
-      ${renderDocument({ meta })} ${renderTheme({ activeTheme })}
+      <app-scroller
+        .pathname=${pathname}
+        .fragment=${fragment}
+        .cards=${cards}
+      ></app-scroller>
+      <app-document .meta=${meta}></app-document>
+      <app-theme .activeTheme=${activeTheme}></app-theme>
     `;
   }
 }
