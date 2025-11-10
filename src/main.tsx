@@ -1,7 +1,6 @@
 /**
  * Polyfills.
  */
-import "requestidlecallback-polyfill";
 import "urlpattern-polyfill"; // for lit router
 
 /**
@@ -17,9 +16,6 @@ import "@shoelace-style/shoelace/dist/components/switch/switch.js";
 import "@shoelace-style/shoelace/dist/components/copy-button/copy-button.js";
 
 /**
- * Web components.
+ * Main component tree entry point.
  */
 import "./components/app";
-import "./components/footer";
-import "./components/header";
-import "./components/post-list";

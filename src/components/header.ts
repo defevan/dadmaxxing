@@ -1,13 +1,12 @@
-import { consume } from "@lit/context";
+import { SignalWatcher, type Signal } from "@lit-labs/signals";
 import { html } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
+import { repeat } from "lit/directives/repeat.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
+import type { State } from "signal-utils/async-function";
 import type { Meta } from "../../shared/types";
 import { AppElement } from "../lib/element";
-import { observe } from "../lib/observe-decorator";
-import { Blog, blogContext } from "../services/blog";
-import { AppRouter, routerContext } from "../services/router";
-import { Theme, themeContext } from "../services/theme";
+import { type ThemeValue } from "../services/theme";
 import "./header.scss";
 
 type Link = {
@@ -24,42 +23,80 @@ const links: Array<Link> = [
   { label: `Source`, href: `https://github.com/defevan/dadmaxxing` },
 ];
 
+export function renderHeader({
+  pathname,
+  meta,
+  activeTheme,
+  toggleTheme,
+}: {
+  pathname: Signal.State<string | undefined>;
+  meta: State<Promise<Meta>>;
+  activeTheme: Signal.State<ThemeValue>;
+  toggleTheme: () => void;
+}) {
+  return html`
+    <app-header
+      .pathname=${pathname}
+      .meta=${meta}
+      .activeTheme=${activeTheme}
+      .toggleTheme=${toggleTheme}
+    ></app-header>
+  `;
+}
+
 @customElement("app-header")
-export class HeaderElement extends AppElement {
-  @consume({ context: blogContext })
-  blog!: Blog;
+export class HeaderElement extends SignalWatcher(AppElement) {
+  @property()
+  pathname?: Signal.State<string | undefined>;
 
-  @consume({ context: routerContext })
-  router!: AppRouter;
+  @property()
+  meta?: State<Promise<Meta>>;
 
-  @consume({ context: themeContext })
-  theme!: Theme;
+  @property()
+  activeTheme?: Signal.State<ThemeValue>;
 
-  @observe((self) => self.blog.meta$)
-  meta?: Meta;
+  @property()
+  toggleTheme?: () => void;
 
-  @observe((self) => self.router.pathname$)
-  pathname?: string;
-
-  @observe((self) => self.theme.theme$)
-  activeTheme?: "light" | "dark";
+  getHeader() {
+    switch (this.meta?.state) {
+      case "REJECTED": {
+        const h1 = html`<h1>
+          error
+          <h1></h1>
+        </h1>`;
+        const p = html`<p>uh, big issue, failed to get the blog meta data</p>
+          <p></p>`;
+        return { h1, p };
+      }
+      default: {
+        const h1 = this.meta?.value
+          ? html`<h1>${this.meta.value.title}</h1>`
+          : html`<h1>${unsafeHTML("&nbsp;")}</h1>`;
+        const p = this.meta?.value
+          ? html`<p>${this.meta.value.description}</p>`
+          : html`<p>${unsafeHTML("&nbsp;")}</p>`;
+        return { h1, p };
+      }
+    }
+  }
 
   render() {
-    const p = this.meta
-      ? html`<p>${this.meta.description}</p>`
-      : html`<p>${unsafeHTML("&nbsp;")}</p>`;
+    const { h1, p } = this.getHeader();
+    const navLinks = repeat(
+      links,
+      (link) => link.href,
+      (link) => this.renderLink(link),
+    );
     return html`
       <header>
+        <div>${h1} ${p}</div>
         <div>
-          <h1>${this.meta?.title ?? "..."}</h1>
-          ${p}
-        </div>
-        <div>
-          <nav>${links.map((link) => this.renderLink(link))}</nav>
+          <nav>${navLinks}</nav>
           <div class="switch-container">
             <sl-switch
-              ?checked=${this.activeTheme === "dark"}
-              @sl-change=${() => this.theme.toggle()}
+              ?checked=${this.activeTheme?.get() === "dark"}
+              @sl-change=${() => this.toggleTheme?.()}
               >dark mode</sl-switch
             >
           </div>
@@ -72,7 +109,7 @@ export class HeaderElement extends AppElement {
     if (href.includes("https://")) {
       return html`<a href=${href}>${label}</a>`;
     }
-    const active = this.pathname === href;
+    const active = this.pathname?.get() === href;
     return html`<a href=${href} ?active=${active}>${label}</a>`;
   }
 }

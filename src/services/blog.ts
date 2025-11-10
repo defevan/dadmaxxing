@@ -1,35 +1,19 @@
-import { createContext } from "@lit/context";
-import { combineLatest, Observable } from "rxjs";
-import { fromFetch } from "rxjs/fetch";
-import { map, shareReplay, switchMap } from "rxjs/operators";
-import type { Meta, Post } from "../../shared/types";
-
-export const blogContext = createContext<Blog>("blog");
+import { array } from "decoders";
+import { signalFunction } from "signal-utils/async-function";
+import { metaDecoder, postDecoder } from "../../shared/types";
 
 export class Blog {
-  readonly meta$: Observable<Meta> = fromFetch(
-    `${import.meta.env.BASE_URL}/meta.json`,
-  ).pipe(
-    switchMap((it) => it.json()),
-    shareReplay({ bufferSize: 1, refCount: true }),
-  );
+  meta = signalFunction(async () => {
+    const response = await fetch(`${import.meta.env.BASE_URL}/meta.json`);
+    const raw: unknown = await response.json();
+    const data = metaDecoder.verify(raw);
+    return data;
+  });
 
-  readonly #posts$: Observable<Array<Post>> = fromFetch(
-    `${import.meta.env.BASE_URL}/posts.json`,
-  ).pipe(
-    switchMap((it) => it.json()),
-    shareReplay({ bufferSize: 1, refCount: true }),
-  );
-
-  posts(tags: Array<string>) {
-    return this.#posts$.pipe(
-      map((posts) => posts.filter((p) => p.tags.some((t) => tags.includes(t)))),
-    );
-  }
-
-  constructor() {
-    combineLatest([this.meta$, this.#posts$]).subscribe({
-      error: (err) => console.warn("failed to load tumblr data", err),
-    });
-  }
+  posts = signalFunction(async () => {
+    const response = await fetch(`${import.meta.env.BASE_URL}/posts.json`);
+    const raw: unknown = await response.json();
+    const data = array(postDecoder).verify(raw);
+    return data;
+  });
 }

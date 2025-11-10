@@ -1,131 +1,99 @@
-import { provide } from "@lit/context";
-import { html, render } from "lit";
+import { signal, SignalWatcher } from "@lit-labs/signals";
+import { html } from "lit";
 import { customElement } from "lit/decorators.js";
-import { createRef, ref } from "lit/directives/ref.js";
-import { delayWhen, tap } from "rxjs/operators";
 import { homeTags } from "../../shared/types";
 import { AppElement } from "../lib/element";
-import { mkIdleObservable } from "../lib/idle-observable";
-import { observe } from "../lib/observe-decorator";
-import { Blog, blogContext } from "../services/blog";
-import { AppRouter, routerContext } from "../services/router";
-import { Theme, themeContext } from "../services/theme";
+import { Blog } from "../services/blog";
+import { AppRouter } from "../services/router";
+import { Theme } from "../services/theme";
 import "./app.scss";
-import { PostListElement } from "./post-list";
+import { renderDocument } from "./document";
+import { renderFooter } from "./footer";
+import { renderHeader } from "./header";
+import { renderPostList } from "./post-list";
+import { renderScroller } from "./scroller";
+import { renderTheme } from "./theme";
 
 @customElement("app-root")
-export class RootElement extends AppElement {
-  list = createRef<PostListElement>();
-
-  @provide({ context: themeContext })
+export class RootElement extends SignalWatcher(AppElement) {
   theme = new Theme();
 
-  @provide({ context: blogContext })
   blog = new Blog();
 
-  @provide({ context: routerContext })
+  cards = signal<NodeListOf<Element> | undefined>(undefined);
+
   router = new AppRouter(this, [
     {
       path: `${import.meta.env.BASE_URL}{/}?`,
-      render: () => html`
-        <app-post-list
-          ${ref(this.list)}
-          .posts$=${this.blog.posts(homeTags)}
-        ></app-post-list>
-      `,
+      render: () =>
+        renderPostList({
+          tags: homeTags,
+          posts: this.blog.posts,
+          handleCards: (evt) => this.cards.set(evt.detail),
+        }),
     },
     {
       path: `${import.meta.env.BASE_URL}/family{/}?`,
-      render: () => html`
-        <app-post-list
-          ${ref(this.list)}
-          .posts$=${this.blog.posts(["family"])}
-        ></app-post-list>
-      `,
+      render: () =>
+        renderPostList({
+          tags: ["family"],
+          posts: this.blog.posts,
+          handleCards: (evt) => this.cards.set(evt.detail),
+        }),
     },
     {
       path: `${import.meta.env.BASE_URL}/climbing{/}?`,
-      render: () => html`
-        <app-post-list
-          ${ref(this.list)}
-          .posts$=${this.blog.posts(["climbing"])}
-        ></app-post-list>
-      `,
+      render: () =>
+        renderPostList({
+          tags: ["climbing"],
+          posts: this.blog.posts,
+          handleCards: (evt) => this.cards.set(evt.detail),
+        }),
     },
     {
       path: `${import.meta.env.BASE_URL}/gaming{/}?`,
-      render: () => html`
-        <app-post-list
-          ${ref(this.list)}
-          .posts$=${this.blog.posts(["gaming"])}
-        ></app-post-list>
-      `,
+      render: () =>
+        renderPostList({
+          tags: ["gaming"],
+          posts: this.blog.posts,
+          handleCards: (evt) => this.cards.set(evt.detail),
+        }),
     },
     {
       path: `${import.meta.env.BASE_URL}/anime{/}?`,
-      render: () => html`
-        <app-post-list
-          ${ref(this.list)}
-          .posts$=${this.blog.posts(["anime"])}
-        ></app-post-list>
-      `,
+      render: () =>
+        renderPostList({
+          tags: ["anime"],
+          posts: this.blog.posts,
+          handleCards: (evt) => this.cards.set(evt.detail),
+        }),
     },
     {
       path: `${import.meta.env.BASE_URL}/*`,
-      render: () => html`
-        <app-post-list
-          ${ref(this.list)}
-          .posts$=${this.blog.posts([])}
-        ></app-post-list>
-      `,
+      render: () =>
+        renderPostList({
+          tags: [],
+          posts: this.blog.posts,
+          handleCards: (evt) => this.cards.set(evt.detail),
+        }),
     },
   ]);
 
-  /**
-   * Set document title and favicon when blog meta data has loaded.
-   */
-  @observe((self) =>
-    self.blog.meta$.pipe(
-      tap((meta) => {
-        document.title = meta.title;
-        render(
-          html`<link rel="icon" type="image/png" href=${meta.avatar}></link>`,
-          document.head,
-        );
-      }),
-    ),
-  )
-  documentMeta?: unknown;
-
-  @observe((self) =>
-    self.router.pathname$.pipe(
-      /**
-       * WHY?: it seems we cannot immediately scroll to a post on page init
-       * with a fragment in the URL. I'm unsure what this is waiting on.
-       * PostListElement is initialized by this time.
-       */
-      delayWhen(() => mkIdleObservable()),
-      tap(() => {
-        const id = location.hash.replace(/^#/, "");
-        if (id) {
-          self.list.value?.scrollToPost(id);
-        } else {
-          window.scrollTo(0, 0);
-        }
-      }),
-    ),
-  )
-  fragmentScroll?: unknown;
-
   render() {
+    const { pathname, fragment } = this.router;
+    const { meta } = this.blog;
+    const { activeTheme, toggle: toggleTheme } = this.theme;
+    const { cards } = this;
     return html`
       <main>
         <div>
-          <app-header></app-header>
+          ${renderHeader({ pathname, meta, activeTheme, toggleTheme })}
           ${this.router.outlet()}
         </div>
-        <app-footer></app-footer>
+        ${renderFooter({ meta })}
       </main>
+      ${renderScroller({ pathname, fragment, cards })}
+      ${renderDocument({ meta })} ${renderTheme({ activeTheme })}
     `;
   }
 }
