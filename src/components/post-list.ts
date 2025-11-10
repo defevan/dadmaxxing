@@ -14,6 +14,9 @@ export class CardsEvent extends CustomEvent<NodeListOf<Element>> {
   }
 }
 
+/**
+ * @fires cards
+ */
 @customElement("app-post-list")
 export class PostListElement extends SignalWatcher(AppElement) {
   @property({ attribute: false })
