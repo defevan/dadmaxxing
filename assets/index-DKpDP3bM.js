@@ -1672,7 +1672,7 @@ ${r}`);return o.name="Decoding error",o}else return r}function j(t){function e(h
  * SPDX-License-Identifier: BSD-3-Clause
  */const Ac=location.origin||location.protocol+"//"+location.host;class Pc extends kc{constructor(){super(...arguments),this.m=e=>{const r=e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey;if(e.defaultPrevented||r)return;const o=e.composedPath().find((n=>n.tagName==="A"));if(o===void 0||o.target!==""||o.hasAttribute("download")||o.getAttribute("rel")==="external")return;const s=o.href;if(s===""||s.startsWith("mailto:"))return;const i=window.location;o.origin===Ac&&(e.preventDefault(),s!==i.href&&(window.history.pushState({},"",s),this.goto(o.pathname)))},this.R=e=>{this.goto(window.location.pathname)}}hostConnected(){super.hostConnected(),window.addEventListener("click",this.m),window.addEventListener("popstate",this.R),this.goto(window.location.pathname)}hostDisconnected(){super.hostDisconnected(),window.removeEventListener("click",this.m),window.removeEventListener("popstate",this.R)}}class Oc extends Pc{constructor(){super(...arguments),this.pathname=zr(void 0),this.fragment=zr(void 0)}async goto(e){const r=e.replace(/\/$/,"");await super.goto(r),this.pathname.set(r),this.fragment.set(location.hash.replace(/^#/,""))}}const Ii="app-theme",Tc=ie(Ze("light"),Ze("dark"));function Rc(){return Tc.value(localStorage.getItem(Ii))}function Lc(){return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}class zc{constructor(){this.activeTheme=zr(Rc()??Lc()),this.toggle=()=>{const e=this.activeTheme.get()==="dark"?"light":"dark";this.activeTheme.set(e),localStorage.setItem(Ii,e)}}}var Nc=Object.getOwnPropertyDescriptor,Dc=(t,e,r,o)=>{for(var s=o>1?void 0:o?Nc(e,r):e,i=t.length-1,n;i>=0;i--)(n=t[i])&&(s=n(s)||s);return s};let ls=class extends Wt(Ht){constructor(){super(...arguments),this.theme=new zc,this.blog=new Sc,this.router=new Oc(this,[{path:"/dadmaxxing{/}?",render:()=>k`
         <app-post-list
-          .tags=${["family","climbing"]}
+          .tags=${["family","climbing","gaming","anime"]}
           .posts=${this.blog.posts}
         ></app-post-list>
       `},{path:"/dadmaxxing/family{/}?",render:()=>k`
@@ -1706,10 +1706,12 @@ ${r}`);return o.name="Decoding error",o}else return r}function j(t){function e(h
             .activeTheme=${o}
             .toggleTheme=${s}
           ></app-header>
+          <sl-divider></sl-divider>
           <app-scroller .pathname=${t} .fragment=${e}>
             ${this.router.outlet()}
           </app-scroller>
         </div>
+        <sl-divider></sl-divider>
         <app-footer .meta=${r}></app-footer>
       </main>
       <app-document .meta=${r}></app-document>
@@ -1762,15 +1764,11 @@ ${r}`);return o.name="Decoding error",o}else return r}function j(t){function e(h
           </div>
         </div>
       </header>
-    `}renderLink({href:t,label:e}){if(t.includes("https://"))return k`<a href=${t}>${e}</a>`;const r=this.pathname?.get()===t;return k`<a href=${t} ?active=${r}>${e}</a>`}};Pe([f({attribute:!1})],ne.prototype,"pathname",2);Pe([f({attribute:!1})],ne.prototype,"meta",2);Pe([f({attribute:!1})],ne.prototype,"activeTheme",2);Pe([f({attribute:!1})],ne.prototype,"toggleTheme",2);ne=Pe([Ft("app-header")],ne);var Wc=Object.defineProperty,Hc=Object.getOwnPropertyDescriptor,xo=(t,e,r,o)=>{for(var s=o>1?void 0:o?Hc(e,r):e,i=t.length-1,n;i>=0;i--)(n=t[i])&&(s=(o?n(e,r,s):n(s))||s);return o&&s&&Wc(e,r,s),s};class Vi extends CustomEvent{constructor(e,r={bubbles:!0,composed:!0}){super("cards",{...r,detail:e})}}let Xe=class extends Wt(Ht){updated(){const t=this.querySelectorAll("div.card");this.dispatchEvent(new Vi(t))}render(){switch(this.posts?.state){case"RESOLVED":{const e=(this.posts.value??[]).filter(o=>o.tags.some(s=>this.tags?.includes(s)));if(e.length<1)return k`
+    `}renderLink({href:t,label:e}){if(t.includes("https://"))return k`<a href=${t}>${e}</a>`;const r=this.pathname?.get()===t;return k`<a href=${t} ?active=${r}>${e}</a>`}};Pe([f({attribute:!1})],ne.prototype,"pathname",2);Pe([f({attribute:!1})],ne.prototype,"meta",2);Pe([f({attribute:!1})],ne.prototype,"activeTheme",2);Pe([f({attribute:!1})],ne.prototype,"toggleTheme",2);ne=Pe([Ft("app-header")],ne);var Wc=Object.defineProperty,Hc=Object.getOwnPropertyDescriptor,xo=(t,e,r,o)=>{for(var s=o>1?void 0:o?Hc(e,r):e,i=t.length-1,n;i>=0;i--)(n=t[i])&&(s=(o?n(e,r,s):n(s))||s);return o&&s&&Wc(e,r,s),s};class Vi extends CustomEvent{constructor(e,r={bubbles:!0,composed:!0}){super("cards",{...r,detail:e})}}let Xe=class extends Wt(Ht){updated(){const t=this.querySelectorAll("div.card");this.dispatchEvent(new Vi(t))}render(){switch(this.posts?.state){case"RESOLVED":{const e=(this.posts.value??[]).filter(r=>r.tags.some(o=>this.tags?.includes(o)));return e.length<1?k`
             <div class="msg">¯\\_(ツ)_/¯ 404 i couldn't find the thing</div>
-          `;const r=Fr(e,o=>o.id,o=>this.renderPost(o));return k`
-          ${r}
-          <sl-divider></sl-divider>
-        `}case"REJECTED":return k`
+          `:Fr(e,r=>r.id,(r,o)=>this.renderPost(r,e.length-1===o))}case"REJECTED":return k`
           <div class="msg">(x_x) 500 something went horribly wrong</div>
-        `;default:return null}}renderPost(t){const e=new Date(t.date),r=`${location.origin}${location.pathname}#${t.id}`;return k`
-      <sl-divider></sl-divider>
+        `;default:return null}}renderPost(t,e){const r=new Date(t.date),o=`${location.origin}${location.pathname}#${t.id}`;return k`
       <div class="card-container">
         <div id=${t.id} class="card" tabindex="0">
           <div class="card-header">
@@ -1778,16 +1776,17 @@ ${r}`);return o.name="Decoding error",o}else return r}function j(t){function e(h
               month="long"
               day="numeric"
               year="numeric"
-              date=${e.toISOString()}
+              date=${r.toISOString()}
             ></sl-format-date>
             <a href=${`#${t.id}`} class="copy-link">
-              <sl-copy-button value=${r}></sl-copy-button>
+              <sl-copy-button value=${o}></sl-copy-button>
             </a>
           </div>
           <div class="card-body">${this.renderPostBody(t.body)}</div>
           <div class="card-footer">${this.renderTags(t.tags)}</div>
         </div>
       </div>
+      ${e?null:k`<sl-divider></sl-divider>`}
     `}renderTags(t){return Fr(t,e=>e,e=>{const r=`/dadmaxxing/${e}`,o=`#${e}`;return k`
           <a href=${r}>
             <sl-tag pill>${o}</sl-tag>
