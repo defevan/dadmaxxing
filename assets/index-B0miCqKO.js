@@ -1716,7 +1716,7 @@ ${r}`);return o.name="Decoding error",o}else return r}function j(t){function e(h
       </main>
       <app-document .meta=${r}></app-document>
       <app-theme .activeTheme=${o}></app-theme>
-    `}};ls=Dc([Ft("app-root")],ls);var Ic=Object.defineProperty,Mc=Object.getOwnPropertyDescriptor,Mi=(t,e,r,o)=>{for(var s=o>1?void 0:o?Mc(e,r):e,i=t.length-1,n;i>=0;i--)(n=t[i])&&(s=(o?n(e,r,s):n(s))||s);return o&&s&&Ic(e,r,s),s};let Vr=class extends Wt(Ht){updated(){switch(this.meta?.state){case"REJECTED":{document.title="error";return}case"RESOLVED":{document.title=this.meta.value?.title??"",Hs(k`<link rel="icon" type="image/png" href=${this.meta.value?.avatar??""}></link>`,document.head);return}}}};Mi([f({attribute:!1})],Vr.prototype,"meta",2);Vr=Mi([Ft("app-document")],Vr);var Bc=Object.defineProperty,Vc=Object.getOwnPropertyDescriptor,Bi=(t,e,r,o)=>{for(var s=o>1?void 0:o?Vc(e,r):e,i=t.length-1,n;i>=0;i--)(n=t[i])&&(s=(o?n(e,r,s):n(s))||s);return o&&s&&Bc(e,r,s),s};let Ur=class extends Wt(Ht){render(){switch(this.meta?.state){case"RESOLVED":{const t=this.meta?.value?.updated??0,e=new Date(t*1e3).toISOString();return k`
+    `}};ls=Dc([Ft("app-root")],ls);var Ic=Object.defineProperty,Mc=Object.getOwnPropertyDescriptor,Mi=(t,e,r,o)=>{for(var s=o>1?void 0:o?Mc(e,r):e,i=t.length-1,n;i>=0;i--)(n=t[i])&&(s=(o?n(e,r,s):n(s))||s);return o&&s&&Ic(e,r,s),s};let Vr=class extends Wt(Ht){updated(){switch(this.meta?.state){case"REJECTED":{document.title="error";return}case"RESOLVED":{document.title=this.meta.value?.title??"",Hs(k`<link rel="icon" type="image/png" href=${this.meta.value?.avatar??""}></link>`,document.head);return}}}};Mi([f({attribute:!1})],Vr.prototype,"meta",2);Vr=Mi([Ft("app-document")],Vr);var Bc=Object.defineProperty,Vc=Object.getOwnPropertyDescriptor,Bi=(t,e,r,o)=>{for(var s=o>1?void 0:o?Vc(e,r):e,i=t.length-1,n;i>=0;i--)(n=t[i])&&(s=(o?n(e,r,s):n(s))||s);return o&&s&&Bc(e,r,s),s};let Ur=class extends Wt(Ht){render(){switch(this.meta?.state){case"RESOLVED":{const t=new Date(this.meta.value?.updated??0).toISOString();return k`
           <footer>
             <div>
               <span>Last updated on</span>
@@ -1724,7 +1724,7 @@ ${r}`);return o.name="Decoding error",o}else return r}function j(t){function e(h
                 month="long"
                 day="numeric"
                 year="numeric"
-                date=${e}
+                date=${t}
               ></sl-format-date>
             </div>
             <div>
