@@ -45,15 +45,11 @@ export class PostListElement extends SignalWatcher(AppElement) {
             <div class="msg">¯\\_(ツ)_/¯ 404 i couldn't find the thing</div>
           `;
         }
-        const list = repeat(
+        return repeat(
           filtered,
           (post) => post.id,
-          (post) => this.renderPost(post),
+          (post, index) => this.renderPost(post, filtered.length - 1 === index),
         );
-        return html`
-          ${list}
-          <sl-divider></sl-divider>
-        `;
       }
       case "REJECTED": {
         return html`
@@ -67,11 +63,10 @@ export class PostListElement extends SignalWatcher(AppElement) {
     }
   }
 
-  renderPost(post: Post) {
+  renderPost(post: Post, last: boolean) {
     const date = new Date(post.date);
     const url = `${location.origin}${location.pathname}#${post.id}`;
     return html`
-      <sl-divider></sl-divider>
       <div class="card-container">
         <div id=${post.id} class="card" tabindex="0">
           <div class="card-header">
@@ -89,6 +84,7 @@ export class PostListElement extends SignalWatcher(AppElement) {
           <div class="card-footer">${this.renderTags(post.tags)}</div>
         </div>
       </div>
+      ${last ? null : html`<sl-divider></sl-divider>`}
     `;
   }
 

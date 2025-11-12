@@ -18,7 +18,7 @@ export class RootElement extends SignalWatcher(AppElement) {
       path: `${import.meta.env.BASE_URL}{/}?`,
       render: () => html`
         <app-post-list
-          .tags=${["family", "climbing"]}
+          .tags=${["family", "climbing", "gaming", "anime"]}
           .posts=${this.blog.posts}
         ></app-post-list>
       `,
@@ -80,10 +80,12 @@ export class RootElement extends SignalWatcher(AppElement) {
             .activeTheme=${activeTheme}
             .toggleTheme=${toggleTheme}
           ></app-header>
+          <sl-divider></sl-divider>
           <app-scroller .pathname=${pathname} .fragment=${fragment}>
             ${this.router.outlet()}
           </app-scroller>
         </div>
+        <sl-divider></sl-divider>
         <app-footer .meta=${meta}></app-footer>
       </main>
       <app-document .meta=${meta}></app-document>
