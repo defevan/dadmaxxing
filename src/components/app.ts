@@ -15,7 +15,7 @@ export class RootElement extends SignalWatcher(AppElement) {
 
   router = new AppRouter(this, [
     {
-      path: `${import.meta.env.BASE_URL}{/}?`,
+      path: `{/}?`,
       render: () => html`
         <app-post-list
           .tags=${["family", "climbing", "gaming", "anime"]}
@@ -24,7 +24,7 @@ export class RootElement extends SignalWatcher(AppElement) {
       `,
     },
     {
-      path: `${import.meta.env.BASE_URL}/family{/}?`,
+      path: `/family{/}?`,
       render: () => html`
         <app-post-list
           .tags=${["family"]}
@@ -33,7 +33,7 @@ export class RootElement extends SignalWatcher(AppElement) {
       `,
     },
     {
-      path: `${import.meta.env.BASE_URL}/climbing{/}?`,
+      path: `/climbing{/}?`,
       render: () => html`
         <app-post-list
           .tags=${["climbing"]}
@@ -42,7 +42,7 @@ export class RootElement extends SignalWatcher(AppElement) {
       `,
     },
     {
-      path: `${import.meta.env.BASE_URL}/gaming{/}?`,
+      path: `/gaming{/}?`,
       render: () => html`
         <app-post-list
           .tags=${["gaming"]}
@@ -51,7 +51,7 @@ export class RootElement extends SignalWatcher(AppElement) {
       `,
     },
     {
-      path: `${import.meta.env.BASE_URL}/anime{/}?`,
+      path: `/anime{/}?`,
       render: () => html`
         <app-post-list
           .tags=${["anime"]}
@@ -60,7 +60,7 @@ export class RootElement extends SignalWatcher(AppElement) {
       `,
     },
     {
-      path: `${import.meta.env.BASE_URL}/*`,
+      path: `/*`,
       render: () => html`
         <app-post-list .tags=${[]} .posts=${this.blog.posts}></app-post-list>
       `,

@@ -93,7 +93,7 @@ export class PostListElement extends SignalWatcher(AppElement) {
       tags,
       (tag) => tag,
       (tag) => {
-        const href = `${import.meta.env.BASE_URL}/${tag}`;
+        const href = `/${tag}`;
         const text = `#${tag}`;
         return html`
           <a href=${href}>

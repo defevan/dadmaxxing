@@ -10,11 +10,11 @@ import { type ThemeValue } from "../services/theme";
 import "./header.scss";
 
 const links = [
-  { label: `Home`, href: `${import.meta.env.BASE_URL}` },
-  { label: `Family`, href: `${import.meta.env.BASE_URL}/family` },
-  { label: `Climbing`, href: `${import.meta.env.BASE_URL}/climbing` },
-  { label: `Gaming`, href: `${import.meta.env.BASE_URL}/gaming` },
-  { label: `Anime`, href: `${import.meta.env.BASE_URL}/anime` },
+  { label: `Home`, href: `/` },
+  { label: `Family`, href: `/family` },
+  { label: `Climbing`, href: `/climbing` },
+  { label: `Gaming`, href: `/gaming` },
+  { label: `Anime`, href: `/anime` },
   { label: `Source`, href: `https://github.com/defevan/dadmaxxing` },
 ];
 
@@ -79,7 +79,7 @@ export class HeaderElement extends SignalWatcher(AppElement) {
     if (href.includes("https://")) {
       return html`<a href=${href}>${label}</a>`;
     }
-    const active = this.pathname?.get() === href;
+    const active = (this.pathname?.get() || "/") === href;
     return html`<a href=${href} ?active=${active}>${label}</a>`;
   }
 }
