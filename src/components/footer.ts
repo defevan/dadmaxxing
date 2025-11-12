@@ -14,8 +14,7 @@ export class FooterElement extends SignalWatcher(AppElement) {
   render() {
     switch (this.meta?.state) {
       case "RESOLVED": {
-        const seconds = this.meta?.value?.updated ?? 0;
-        const date = new Date(seconds * 1000).toISOString();
+        const date = new Date(this.meta.value?.updated ?? 0).toISOString();
         return html`
           <footer>
             <div>

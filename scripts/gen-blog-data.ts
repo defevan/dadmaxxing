@@ -21,15 +21,6 @@ async function main() {
     posts: rawPosts,
   });
 
-  const meta: Meta = {
-    avatar:
-      decoded.blog.blog.avatar.find((avatar) => avatar.width === 128)?.url ??
-      "",
-    title: decoded.blog.blog.title,
-    description: decoded.blog.blog.description,
-    updated: decoded.blog.blog.updated,
-  };
-
   const posts: Array<Post> = decoded.posts.posts
     .filter(({ tags }) => tags.some((tag) => includedTags.includes(tag)))
     .map(({ id, date, body, tags }) => ({
@@ -49,6 +40,20 @@ async function main() {
       }
       return 0;
     });
+
+  const updated = posts.reduce(
+    (latest, post) => (post.date > latest ? post.date : latest),
+    decoded.blog.blog.updated * 1000,
+  );
+
+  const meta: Meta = {
+    avatar:
+      decoded.blog.blog.avatar.find((avatar) => avatar.width === 128)?.url ??
+      "",
+    title: decoded.blog.blog.title,
+    description: decoded.blog.blog.description,
+    updated,
+  };
 
   try {
     await fs.mkdir(path.join(__dirname, "../public"));
