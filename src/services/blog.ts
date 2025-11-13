@@ -12,25 +12,24 @@ export class Blog {
     this.#fetch("/meta.json", metaDecoder),
   );
 
-  all: State<Promise<Post[]>> = signalFunction(() =>
-    this.#fetch("/posts/all.json", array(postDecoder)),
-  );
-
-  family: State<Promise<Post[]>> = signalFunction(() =>
-    this.#fetch("/posts/family.json", array(postDecoder)),
-  );
-
-  climbing: State<Promise<Post[]>> = signalFunction(() =>
-    this.#fetch("/posts/climbing.json", array(postDecoder)),
-  );
-
-  gaming: State<Promise<Post[]>> = signalFunction(() =>
-    this.#fetch("/posts/gaming.json", array(postDecoder)),
-  );
-
-  anime: State<Promise<Post[]>> = signalFunction(() =>
-    this.#fetch("/posts/anime.json", array(postDecoder)),
-  );
+  posts = {
+    all: signalFunction(() =>
+      this.#fetch("/posts/all.json", array(postDecoder)),
+    ),
+    family: signalFunction(() =>
+      this.#fetch("/posts/family.json", array(postDecoder)),
+    ),
+    climbing: signalFunction(() =>
+      this.#fetch("/posts/climbing.json", array(postDecoder)),
+    ),
+    gaming: signalFunction(() =>
+      this.#fetch("/posts/gaming.json", array(postDecoder)),
+    ),
+    anime: signalFunction(() =>
+      this.#fetch("/posts/anime.json", array(postDecoder)),
+    ),
+    none: signalFunction(() => Promise.resolve([])),
+  };
 
   none: State<Promise<Post[]>> = signalFunction(() => Promise.resolve([]));
 

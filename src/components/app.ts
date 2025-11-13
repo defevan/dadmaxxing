@@ -1,4 +1,5 @@
 import { SignalWatcher } from "@lit-labs/signals";
+import { constant, either, object, optional } from "decoders";
 import { html } from "lit";
 import { customElement } from "lit/decorators.js";
 import { AppElement } from "../lib/element";
@@ -15,40 +16,34 @@ export class RootElement extends SignalWatcher(AppElement) {
 
   router = new AppRouter(this, [
     {
-      path: `{/}?`,
-      render: () => html`
-        <app-post-list .posts=${this.blog.all}></app-post-list>
-      `,
+      pattern: new URLPattern({
+        pathname: "{/:tag}?{/}*",
+      }),
+      render: (props) => {
+        const decoder = object({
+          tag: optional(
+            either(
+              constant("all"),
+              constant("family"),
+              constant("climbing"),
+              constant("gaming"),
+              constant("anime"),
+            ),
+          ),
+        });
+        const decoded = decoder.value(props);
+        const tag = decoded?.tag;
+        const posts = this.blog.posts[tag ?? "all"];
+        return html`<app-post-list .posts=${posts}></app-post-list>`;
+      },
     },
     {
-      path: `/family{/}?`,
-      render: () => html`
-        <app-post-list .posts=${this.blog.family}></app-post-list>
-      `,
-    },
-    {
-      path: `/climbing{/}?`,
-      render: () => html`
-        <app-post-list .posts=${this.blog.climbing}></app-post-list>
-      `,
-    },
-    {
-      path: `/gaming{/}?`,
-      render: () => html`
-        <app-post-list .posts=${this.blog.gaming}></app-post-list>
-      `,
-    },
-    {
-      path: `/anime{/}?`,
-      render: () => html`
-        <app-post-list .posts=${this.blog.anime}></app-post-list>
-      `,
-    },
-    {
-      path: `/*`,
-      render: () => html`
-        <app-post-list .posts=${this.blog.none}></app-post-list>
-      `,
+      pattern: new URLPattern({
+        pathname: "/*",
+      }),
+      render: () => {
+        return html`<app-post-list .posts=${this.blog.none}></app-post-list>`;
+      },
     },
   ]);
 
