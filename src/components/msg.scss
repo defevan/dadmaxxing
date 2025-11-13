@@ -1,10 +1,10 @@
 app-msg {
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: var(--sl-spacing-large);
+  align-items: flex-start;
+  padding: var(--sl-spacing-4x-large);
   text-align: center;
   height: calc(
-    100vh - 140px - 68px - 2px - var(--sl-spacing-large) * 2
+    100svh - 140px - 68px - 2px - var(--sl-spacing-4x-large) * 2
   ); // header, footer, dividers, padding
 }
