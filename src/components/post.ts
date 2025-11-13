@@ -3,79 +3,61 @@ import { html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
-import type { State } from "signal-utils/async-function";
-import { type Meta, type Post, type PostList } from "../../shared/types";
+import { State } from "signal-utils/async-function";
+import { type Post } from "../../shared/types";
 import { AppElement } from "../lib/element";
-import "./post-list.scss";
+import "./post.scss";
 
-export class CardsEvent extends CustomEvent<NodeListOf<Element>> {
-  constructor(
-    detail: NodeListOf<Element>,
-    eventInitDict: EventInit = { bubbles: true, composed: true },
-  ) {
-    super("cards", { ...eventInitDict, detail });
-  }
-}
-
-/**
- * @fires cards
- */
-@customElement("app-post-list")
-export class PostListElement extends SignalWatcher(AppElement) {
+@customElement("app-post")
+export class PostElement extends SignalWatcher(AppElement) {
   @property({ attribute: false })
-  meta?: State<Promise<Meta>>;
-
-  @property({ attribute: false })
-  posts?: State<Promise<PostList>>;
-
-  updated() {
-    const cards = this.querySelectorAll("div.card");
-    this.dispatchEvent(new CardsEvent(cards));
-  }
+  post?: Post | State<Promise<Post>>;
 
   render() {
-    if (this.posts?.state === "RESOLVED" && this.posts.value?.posts) {
-      return this.renderList(this.posts.value);
+    if (this.post && !(this.post instanceof State)) {
+      return this.renderPost(this.post);
     }
-    if (this.posts?.state === "REJECTED") {
+    if (this.post?.state === "RESOLVED" && this.post.value) {
+      return this.renderPost(this.post.value);
+    }
+    if (this.post?.state === "REJECTED") {
       return html`
         <app-msg .msg=${`¯\\_(ツ)_/¯ 404 i couldn't find the thing`}></app-msg>
-        <sl-divider></sl-divider>
-        <app-footer .meta=${this.meta}></app-footer>
       `;
     }
-    if (this.posts?.state === "PENDING") {
+    if (this.post?.state === "PENDING") {
       return html`
         <app-msg .delay=${500} .msg=${`(._. ) looking for the thing`}></app-msg>
-        <sl-divider></sl-divider>
-        <app-footer .meta=${this.meta}></app-footer>
       `;
     }
     return html`
       <app-msg .msg=${`(x_x) 500 something went horribly wrong`}></app-msg>
-      <sl-divider></sl-divider>
-      <app-footer .meta=${this.meta}></app-footer>
     `;
   }
 
-  renderList(postList: PostList) {
-    const list = repeat(
-      postList.posts,
-      (post) => post.id,
-      (post, index) =>
-        this.renderPost(post, postList.posts.length - 1 === index),
-    );
+  renderPost(post: Post) {
+    const date = new Date(post.date);
+    const url = `${location.origin}/post/${post.id}`;
     return html`
-      ${list}
-      <sl-divider></sl-divider>
-      <app-footer .meta=${this.meta} .postList=${postList}></app-footer>
-    `;
-  }
-
-  renderPost(post: Post, last: boolean) {
-    return html`
-      <app-post .post=${post}></app-post>
-      ${last ? null : html`<sl-divider></sl-divider>`}
+      <div class="card-container">
+        <div id=${post.id} class="card" tabindex="0">
+          <div class="card-header">
+            <sl-format-date
+              month="long"
+              day="numeric"
+              year="numeric"
+              date=${date.toISOString()}
+            ></sl-format-date>
+            <sl-copy-button
+              value=${url}
+              copy-label="copy post link"
+              success-label="post link copied"
+            ></sl-copy-button>
+          </div>
+          <div class="card-body">${this.renderPostBody(post.body)}</div>
+          <div class="card-footer">${this.renderTags(post.tags)}</div>
+        </div>
+      </div>
     `;
   }
 

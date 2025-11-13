@@ -1,7 +1,23 @@
 import fs from "fs/promises";
 import path from "path";
 import { createClient } from "tumblr.js";
-import { includedTags, Meta, Post, tumblrDataDecoder } from "../shared/types";
+import {
+  includedTags,
+  Meta,
+  Post,
+  PostList,
+  tumblrDataDecoder,
+} from "../shared/types";
+
+const PAGE_SIZE = 10;
+
+function chunk<T>(list: T[], size = PAGE_SIZE): T[][] {
+  const result = [];
+  for (let i = 0; i < list.length; i += size) {
+    result.push(list.slice(i, i + size));
+  }
+  return result;
+}
 
 const client = createClient({
   consumer_key: process.env.tumblr_consumer_key,
@@ -41,9 +57,9 @@ async function main() {
       return 0;
     });
 
-  const postPartitions = includedTags.map((tag) => [
+  const postPartitions: Array<[string, Post[][]]> = includedTags.map((tag) => [
     tag,
-    posts.filter((p) => p.tags.includes(tag)),
+    chunk(posts.filter((p) => p.tags.includes(tag))),
   ]);
 
   const updated = posts.reduce(
@@ -61,11 +77,19 @@ async function main() {
   };
 
   try {
+    await fs.rmdir(path.join(__dirname, "../public"), { recursive: true });
+  } catch {}
+
+  try {
     await fs.mkdir(path.join(__dirname, "../public"));
   } catch {}
 
   try {
     await fs.mkdir(path.join(__dirname, "../public/posts"));
+  } catch {}
+
+  try {
+    await fs.mkdir(path.join(__dirname, "../public/post"));
   } catch {}
 
   await Promise.all([
@@ -74,18 +98,44 @@ async function main() {
       JSON.stringify(meta),
       "utf-8",
     ),
-    fs.writeFile(
-      path.join(__dirname, `../public/posts/all.json`),
-      JSON.stringify(posts),
-      "utf-8",
-    ),
-    ...postPartitions.map(([tag, posts]) =>
-      fs.writeFile(
-        path.join(__dirname, `../public/posts/${tag}.json`),
-        JSON.stringify(posts),
+    ...chunk(posts).map((posts, index, chunks) => {
+      const postList: PostList = {
+        posts,
+        prev: index !== 0 ? `/page/${index}` : undefined,
+        next: index < chunks.length - 1 ? `/page/${index + 2}` : undefined,
+        currentPageIndex: index + 1,
+        totalPageCount: chunks.length,
+      };
+      return fs.writeFile(
+        path.join(__dirname, `../public/posts/all.${index + 1}.json`),
+        JSON.stringify(postList),
         "utf-8",
-      ),
-    ),
+      );
+    }),
+    ...postPartitions.flatMap(([tag, chunks]) => {
+      return chunks.map((posts, index) => {
+        const postList: PostList = {
+          posts,
+          prev: index !== 0 ? `/${tag}/page/${index}` : undefined,
+          next:
+            index < chunks.length - 1 ? `/${tag}/page/${index + 2}` : undefined,
+          currentPageIndex: index + 1,
+          totalPageCount: chunks.length,
+        };
+        return fs.writeFile(
+          path.join(__dirname, `../public/posts/${tag}.${index + 1}.json`),
+          JSON.stringify(postList),
+          "utf-8",
+        );
+      });
+    }),
+    ...posts.map((post) => {
+      return fs.writeFile(
+        path.join(__dirname, `../public/post/${post.id}.json`),
+        JSON.stringify(post),
+        "utf-8",
+      );
+    }),
   ]);
 
   console.log(`meta.json:\n${JSON.stringify(meta, null, 2)}\n`);

@@ -7,6 +7,7 @@ import {
   null_,
   number,
   object,
+  optional,
   record,
   string,
 } from "decoders";
@@ -355,4 +356,20 @@ export const postDecoder: Decoder<Post> = object({
   date: number,
   body: string,
   tags: array(string),
+});
+
+export type PostList = {
+  posts: Post[];
+  prev?: string | undefined;
+  next?: string | undefined;
+  currentPageIndex: number;
+  totalPageCount: number;
+};
+
+export const postListDecoder: Decoder<PostList> = object({
+  posts: array(postDecoder),
+  prev: optional(string),
+  next: optional(string),
+  currentPageIndex: number,
+  totalPageCount: number,
 });

@@ -21,7 +21,6 @@
     "@shoelace-style/shoelace": "^2.20.1",
     "decoders": "^2.7.5",
     "lit": "^3.3.1",
-    "requestidlecallback-polyfill": "^1.0.2",
     "signal-utils": "^0.21.1",
     "urlpattern-polyfill": "^10.1.0"
   }

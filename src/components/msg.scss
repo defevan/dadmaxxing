@@ -1,0 +1,10 @@
+app-msg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--sl-spacing-large);
+  text-align: center;
+  height: calc(
+    100vh - 140px - 68px - 2px - var(--sl-spacing-large) * 2
+  ); // header, footer, dividers, padding
+}

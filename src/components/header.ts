@@ -9,13 +9,43 @@ import { AppElement } from "../lib/element";
 import { type ThemeValue } from "../services/theme";
 import "./header.scss";
 
-const links = [
-  { label: `Home`, href: `/` },
-  { label: `Family`, href: `/family` },
-  { label: `Climbing`, href: `/climbing` },
-  { label: `Gaming`, href: `/gaming` },
-  { label: `Anime`, href: `/anime` },
-  { label: `Source`, href: `https://github.com/defevan/dadmaxxing` },
+type Link = {
+  label: string;
+  href: string;
+  active: (pathname: string) => boolean;
+};
+
+const links: Link[] = [
+  {
+    label: `Home`,
+    href: `/`,
+    active: (pathname) => pathname.length < 1 || pathname.startsWith("/page"),
+  },
+  {
+    label: `Family`,
+    href: `/family`,
+    active: (pathname) => pathname.startsWith("/family"),
+  },
+  {
+    label: `Climbing`,
+    href: `/climbing`,
+    active: (pathname) => pathname.startsWith("/climbing"),
+  },
+  {
+    label: `Gaming`,
+    href: `/gaming`,
+    active: (pathname) => pathname.startsWith("/gaming"),
+  },
+  {
+    label: `Anime`,
+    href: `/anime`,
+    active: (pathname) => pathname.startsWith("/anime"),
+  },
+  {
+    label: `Source`,
+    href: `https://github.com/defevan/dadmaxxing`,
+    active: () => false,
+  },
 ];
 
 @customElement("app-header")
@@ -75,11 +105,14 @@ export class HeaderElement extends SignalWatcher(AppElement) {
     `;
   }
 
-  renderLink({ href, label }: (typeof links)[number]) {
+  renderLink({ href, label, active }: Link) {
     if (href.includes("https://")) {
       return html`<a href=${href}>${label}</a>`;
     }
-    const active = (this.pathname?.get() || "/") === href;
-    return html`<a href=${href} ?active=${active}>${label}</a>`;
+    return html`
+      <a href=${href} ?active=${active(this.pathname?.get() ?? "")}>
+        ${label}
+      </a>
+    `;
   }
 }

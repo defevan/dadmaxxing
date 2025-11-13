@@ -1,7 +1,6 @@
 /**
  * polyfills
  */
-import "requestidlecallback-polyfill"; // for scrolling behavior
 import "urlpattern-polyfill"; // for lit router
 
 /**
@@ -19,10 +18,11 @@ import "@shoelace-style/shoelace/dist/components/copy-button/copy-button.js";
 /**
  * app components
  */
+import "./components/msg";
 import "./components/app";
 import "./components/document";
 import "./components/footer";
 import "./components/header";
+import "./components/post";
 import "./components/post-list";
-import "./components/scroller";
 import "./components/theme";

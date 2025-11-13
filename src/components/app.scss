@@ -16,10 +16,6 @@ body {
   }
 
   main {
-    > div {
-      min-height: calc(100vh - 73px - 2px); // height of footer and two dividers
-    }
-
     app-header,
     app-footer {
       display: block;

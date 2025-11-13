@@ -4,5 +4,23 @@ app-footer {
     justify-content: space-between;
     align-items: center;
     gap: var(--sl-spacing-large);
+
+    div:first-of-type {
+      flex: 1;
+    }
+
+    div:last-of-type {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--sl-spacing-large);
+    }
+  }
+
+  @media (max-width: 1000px) {
+    footer {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 }
