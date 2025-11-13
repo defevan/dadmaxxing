@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "start": "tsx --watch --env-file ../.env src/main.ts",
+    "prod": "tsx src/main.ts",
+    "fmt": "prettier --write src"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.1",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.6"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
