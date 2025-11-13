@@ -23,9 +23,6 @@ export class CardsEvent extends CustomEvent<NodeListOf<Element>> {
 @customElement("app-post-list")
 export class PostListElement extends SignalWatcher(AppElement) {
   @property({ attribute: false })
-  tags?: Array<string>;
-
-  @property({ attribute: false })
   posts?: State<Promise<Post[]>>;
 
   updated() {
@@ -37,18 +34,15 @@ export class PostListElement extends SignalWatcher(AppElement) {
     switch (this.posts?.state) {
       case "RESOLVED": {
         const posts = this.posts.value ?? [];
-        const filtered = posts.filter((p) =>
-          p.tags.some((t) => this.tags?.includes(t)),
-        );
-        if (filtered.length < 1) {
+        if (posts.length < 1) {
           return html`
             <div class="msg">¯\\_(ツ)_/¯ 404 i couldn't find the thing</div>
           `;
         }
         return repeat(
-          filtered,
+          posts,
           (post) => post.id,
-          (post, index) => this.renderPost(post, filtered.length - 1 === index),
+          (post, index) => this.renderPost(post, posts.length - 1 === index),
         );
       }
       case "REJECTED": {

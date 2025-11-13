@@ -17,52 +17,37 @@ export class RootElement extends SignalWatcher(AppElement) {
     {
       path: `{/}?`,
       render: () => html`
-        <app-post-list
-          .tags=${["family", "climbing", "gaming", "anime"]}
-          .posts=${this.blog.posts}
-        ></app-post-list>
+        <app-post-list .posts=${this.blog.all}></app-post-list>
       `,
     },
     {
       path: `/family{/}?`,
       render: () => html`
-        <app-post-list
-          .tags=${["family"]}
-          .posts=${this.blog.posts}
-        ></app-post-list>
+        <app-post-list .posts=${this.blog.family}></app-post-list>
       `,
     },
     {
       path: `/climbing{/}?`,
       render: () => html`
-        <app-post-list
-          .tags=${["climbing"]}
-          .posts=${this.blog.posts}
-        ></app-post-list>
+        <app-post-list .posts=${this.blog.climbing}></app-post-list>
       `,
     },
     {
       path: `/gaming{/}?`,
       render: () => html`
-        <app-post-list
-          .tags=${["gaming"]}
-          .posts=${this.blog.posts}
-        ></app-post-list>
+        <app-post-list .posts=${this.blog.gaming}></app-post-list>
       `,
     },
     {
       path: `/anime{/}?`,
       render: () => html`
-        <app-post-list
-          .tags=${["anime"]}
-          .posts=${this.blog.posts}
-        ></app-post-list>
+        <app-post-list .posts=${this.blog.anime}></app-post-list>
       `,
     },
     {
       path: `/*`,
       render: () => html`
-        <app-post-list .tags=${[]} .posts=${this.blog.posts}></app-post-list>
+        <app-post-list .posts=${this.blog.none}></app-post-list>
       `,
     },
   ]);

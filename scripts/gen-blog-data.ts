@@ -41,6 +41,11 @@ async function main() {
       return 0;
     });
 
+  const postPartitions = includedTags.map((tag) => [
+    tag,
+    posts.filter((p) => p.tags.includes(tag)),
+  ]);
+
   const updated = posts.reduce(
     (latest, post) => (post.date > latest ? post.date : latest),
     decoded.blog.blog.updated * 1000,
@@ -59,6 +64,10 @@ async function main() {
     await fs.mkdir(path.join(__dirname, "../public"));
   } catch {}
 
+  try {
+    await fs.mkdir(path.join(__dirname, "../public/posts"));
+  } catch {}
+
   await Promise.all([
     fs.writeFile(
       path.join(__dirname, "../public/meta.json"),
@@ -66,9 +75,16 @@ async function main() {
       "utf-8",
     ),
     fs.writeFile(
-      path.join(__dirname, "../public/posts.json"),
+      path.join(__dirname, `../public/posts/all.json`),
       JSON.stringify(posts),
       "utf-8",
+    ),
+    ...postPartitions.map(([tag, posts]) =>
+      fs.writeFile(
+        path.join(__dirname, `../public/posts/${tag}.json`),
+        JSON.stringify(posts),
+        "utf-8",
+      ),
     ),
   ]);
 
