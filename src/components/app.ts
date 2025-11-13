@@ -1,7 +1,8 @@
 import { SignalWatcher } from "@lit-labs/signals";
-import { constant, either, object, optional, string } from "decoders";
+import { object, optional, string } from "decoders";
 import { html } from "lit";
 import { customElement } from "lit/decorators.js";
+import { tagsDecoder } from "../../shared/types";
 import { AppElement } from "../lib/element";
 import { Blog } from "../services/blog";
 import { AppRouter } from "../services/router";
@@ -27,7 +28,7 @@ export class RootElement extends SignalWatcher(AppElement) {
           cursor: optional(string),
         });
         const decoded = decoder.verify(props);
-        const cursor = decoded?.cursor ?? (1).toString();
+        const cursor = decoded?.cursor;
         const posts = this.blog.posts("all", cursor);
         return html`
           <app-post-list
@@ -42,21 +43,16 @@ export class RootElement extends SignalWatcher(AppElement) {
      */
     {
       pattern: new URLPattern({
-        pathname: "/:tag{/page/:cursor}?{/}?",
+        pathname: "/:tag(family|climbing|gaming|anime){/page/:cursor}?{/}?",
       }),
       render: (props) => {
         const decoder = object({
-          tag: either(
-            constant("family"),
-            constant("climbing"),
-            constant("gaming"),
-            constant("anime"),
-          ),
+          tag: tagsDecoder,
           cursor: optional(string),
         });
         const decoded = decoder.verify(props);
         const tag = decoded?.tag;
-        const cursor = decoded?.cursor ?? (1).toString();
+        const cursor = decoded?.cursor;
         const posts = this.blog.posts(tag, cursor);
         return html`
           <app-post-list

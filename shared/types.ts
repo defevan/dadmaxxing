@@ -1,6 +1,7 @@
 import {
   array,
   boolean,
+  constant,
   type Decoder,
   either,
   mixed,
@@ -14,7 +15,15 @@ import {
 
 // Helper values for organizing tags.
 
-export const includedTags = ["family", "climbing", "gaming", "anime"];
+export const tags = ["family", "climbing", "gaming", "anime"] as const;
+
+export const tagsDecoder: Decoder<(typeof tags)[number]> = either(
+  ...tags.map((t) => constant(t)),
+);
+
+export const tagsmap = Object.fromEntries(tags.map((tag) => [tag, true]));
+
+export type Tags = "all" | (typeof tags)[number];
 
 // Mostly generated types/decoders for interacting with Tumblr's API.
 

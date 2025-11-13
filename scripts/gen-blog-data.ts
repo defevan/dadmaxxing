@@ -1,11 +1,14 @@
+import { createHash } from "crypto";
 import fs from "fs/promises";
 import path from "path";
 import { createClient } from "tumblr.js";
 import {
-  includedTags,
   Meta,
   Post,
   PostList,
+  tags,
+  Tags,
+  tagsmap,
   tumblrDataDecoder,
 } from "../shared/types";
 
@@ -17,6 +20,30 @@ function chunk<T>(list: T[], size = PAGE_SIZE): T[][] {
     result.push(list.slice(i, i + size));
   }
   return result;
+}
+
+/**
+ * number to relatively short hash (relative to what?)
+ */
+function badhash(value: number): string {
+  return createHash("md5")
+    .update(value.toString(), "utf-8")
+    .digest("base64url");
+}
+
+function makeFrontendURL(tag: Tags, pageIndex: number) {
+  const prepend = tag === "all" ? "/" : `/${tag}/`;
+  if (pageIndex < 1) {
+    return prepend;
+  }
+  return `${prepend}page/${badhash(pageIndex + 1)}`;
+}
+
+function makeBackendURL(tag: Tags, pageIndex: number) {
+  if (pageIndex < 1) {
+    return `/posts/${tag}.json`;
+  }
+  return `/posts/${tag}.${badhash(pageIndex + 1)}.json`;
 }
 
 const client = createClient({
@@ -38,7 +65,7 @@ async function main() {
   });
 
   const posts: Array<Post> = decoded.posts.posts
-    .filter(({ tags }) => tags.some((tag) => includedTags.includes(tag)))
+    .filter(({ tags }) => tags.some((tag) => tagsmap[tag] ?? false))
     .map(({ id, date, body, tags }) => ({
       id,
       date: new Date(date).getTime(),
@@ -57,10 +84,9 @@ async function main() {
       return 0;
     });
 
-  const postPartitions: Array<[string, Post[][]]> = includedTags.map((tag) => [
-    tag,
-    chunk(posts.filter((p) => p.tags.includes(tag))),
-  ]);
+  const postPartitions: Array<[(typeof tags)[number], Post[][]]> = tags.map(
+    (tag) => [tag, chunk(posts.filter((p) => p.tags.includes(tag)))],
+  );
 
   const updated = posts.reduce(
     (latest, post) => (post.date > latest ? post.date : latest),
@@ -101,13 +127,16 @@ async function main() {
     ...chunk(posts).map((posts, index, chunks) => {
       const postList: PostList = {
         posts,
-        prev: index !== 0 ? `/page/${index}` : undefined,
-        next: index < chunks.length - 1 ? `/page/${index + 2}` : undefined,
+        prev: index > 0 ? makeFrontendURL("all", index - 1) : undefined,
+        next:
+          index < chunks.length - 1
+            ? makeFrontendURL("all", index + 1)
+            : undefined,
         currentPageIndex: index + 1,
         totalPageCount: chunks.length,
       };
       return fs.writeFile(
-        path.join(__dirname, `../public/posts/all.${index + 1}.json`),
+        path.join(__dirname, `../public`, makeBackendURL("all", index)),
         JSON.stringify(postList),
         "utf-8",
       );
@@ -116,14 +145,16 @@ async function main() {
       return chunks.map((posts, index) => {
         const postList: PostList = {
           posts,
-          prev: index !== 0 ? `/${tag}/page/${index}` : undefined,
+          prev: index > 0 ? makeFrontendURL(tag, index - 1) : undefined,
           next:
-            index < chunks.length - 1 ? `/${tag}/page/${index + 2}` : undefined,
+            index < chunks.length - 1
+              ? makeFrontendURL(tag, index + 1)
+              : undefined,
           currentPageIndex: index + 1,
           totalPageCount: chunks.length,
         };
         return fs.writeFile(
-          path.join(__dirname, `../public/posts/${tag}.${index + 1}.json`),
+          path.join(__dirname, `../public`, makeBackendURL(tag, index)),
           JSON.stringify(postList),
           "utf-8",
         );
@@ -138,8 +169,6 @@ async function main() {
     }),
   ]);
 
-  console.log(`meta.json:\n${JSON.stringify(meta, null, 2)}\n`);
-  console.log(`posts.json:\n${JSON.stringify(posts, null, 2)}\n`);
   console.log("done");
 }
 

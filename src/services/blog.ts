@@ -5,6 +5,7 @@ import {
   postDecoder,
   postListDecoder,
   type Meta,
+  type Tags,
 } from "../../shared/types";
 
 export class Blog {
@@ -12,13 +13,13 @@ export class Blog {
     this.#fetch("/meta.json", metaDecoder),
   );
 
-  posts(
-    tag: "all" | "family" | "climbing" | "gaming" | "anime",
-    cursor: string,
-  ) {
-    return signalFunction(() =>
-      this.#fetch(`/posts/${tag}.${cursor}.json`, postListDecoder),
-    );
+  posts(tag: Tags, cursor?: string | undefined) {
+    return signalFunction(() => {
+      const url = cursor
+        ? `/posts/${tag}.${cursor}.json`
+        : `/posts/${tag}.json`;
+      return this.#fetch(url, postListDecoder);
+    });
   }
 
   post(id: string) {
