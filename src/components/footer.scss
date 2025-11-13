@@ -19,8 +19,15 @@ app-footer {
 
   @media (max-width: 1000px) {
     footer {
-      flex-direction: column;
+      flex-direction: column-reverse;
       align-items: flex-start;
+
+      div:last-of-type {
+        width: 100%;
+        > span {
+          flex: 1;
+        }
+      }
     }
   }
 }
