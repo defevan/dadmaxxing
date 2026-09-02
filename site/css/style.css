@@ -148,22 +148,21 @@ a:hover {
 
 .spread {
   display: grid;
-  grid-template-columns: 1fr 1fr minmax(14.5rem, 19rem);
-  gap: 0.8rem 0.85rem;
+  grid-template-columns: 1fr 1fr minmax(14.5rem, 18rem);
+  gap: 0.75rem 0.8rem;
   align-items: stretch;
-  min-height: calc(100svh - 6.5rem);
 }
 
 .spread-frame {
   display: block;
-  min-height: 0;
   background: var(--mat);
 }
 
 .spread-frame img {
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
 }
 
@@ -530,11 +529,6 @@ a:hover {
 @media (max-width: 980px) {
   .spread {
     grid-template-columns: 1fr 1fr;
-    min-height: 0;
-  }
-
-  .spread-frame {
-    min-height: min(72vw, 36rem);
   }
 
   .spread-note {
@@ -569,12 +563,7 @@ a:hover {
     gap: 0.55rem;
   }
 
-  .spread-frame {
-    min-height: 0;
-  }
-
   .spread-frame img {
-    height: auto;
     aspect-ratio: 3 / 4;
   }
 
