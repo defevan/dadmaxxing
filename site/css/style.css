@@ -6,9 +6,22 @@
   --accent: #c94b24;
   --hair: color-mix(in srgb, var(--ink) 14%, transparent);
   --mat: #f0e0d2;
+  --selection: #f3c4a8;
   --max: 34rem;
   --page-pad: 1.15rem;
   --photo-radius: 0.95rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #1a1410;
+    --ink: #f3e6d8;
+    --muted: #b5a194;
+    --accent: #e07048;
+    --mat: #2c241e;
+    --selection: #6b3a28;
+  }
 }
 
 * {
@@ -49,7 +62,7 @@ a:hover {
 }
 
 ::selection {
-  background: #f3c4a8;
+  background: var(--selection);
   color: var(--ink);
 }
 
