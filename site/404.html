@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>404 — dadmaxxing</title>
+    <meta name="description" content="The corner of the internet where I dadpost.">
+    <link rel="icon" href="/favicon.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>
+      document.documentElement.dataset.theme =
+        localStorage.getItem("theme") ||
+        (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    </script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="site-header">
+        <h1><a href="/">dadmaxxing</a></h1>
+        <p class="lede">The corner of the internet where I dadpost.</p>
+        <div class="nav-row">
+          <nav>
+          <a href="/">Home</a>
+          <a href="/family/">Family</a>
+          <a href="/climbing/">Climbing</a>
+          <a href="/gaming/">Gaming</a>
+          <a href="/anime/">Anime</a>
+          <a href="https://github.com/defevan/dadmaxxing">Source</a>
+          </nav>
+          <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false">dark mode</button>
+        </div>
+      </header>
+      <main>
+        <div class="not-found">
+          <p>¯\_(ツ)_/¯ 404 i couldn't find the thing</p>
+        </div>
+      </main>
+      <footer class="site-footer">
+        <p>Last updated December 21, 2025</p>
+      </footer>
+    </div>
+    <script src="/js/theme.js"></script>
+  </body>
+</html>

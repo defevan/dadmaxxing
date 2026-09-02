@@ -1,12 +1,37 @@
-This is a frontend site built with [Lit](https://lit.dev/) and [Tumblr](https://www.tumblr.com/).
+# dadmaxxing
 
-This is intended to be an outlet for me to post about my family, climbing adventures, whatever I happen to be watching, and anything else that may cross my mind that I want to put into words.
+The corner of the internet where I dadpost. Family, climbing, watching, whatever.
 
-~~If you're interested in the code, I think the most notable bit is the "observe" decorator. I find it makes interacting with [rxjs](https://rxjs.dev/) observables from a Lit web component a breeze. Check it out:~~
-* [Implementation](https://github.com/defevan/dadmaxxing/blob/fccb83ad9c5a725bbbfbaa5199e429a85cd39b58/src/lib/observe-decorator.ts)
-* [Usage](https://github.com/defevan/dadmaxxing/blob/fccb83ad9c5a725bbbfbaa5199e429a85cd39b58/src/components/header.ts)
+This is a plain static site: HTML, CSS, and a tiny theme-toggle script. No Lit, no Vite, no CMS, no Tumblr. GitHub Pages serves the files in `site/` at [dad.evanjon.es](https://dad.evanjon.es).
 
-I've since removed all rxjs usage in favor of [signals](https://github.com/tc39/proposal-signals). The links above still point to commits that show the observe decorator.
+## Local preview
+
+```sh
+cd site
+python3 -m http.server 8080
+```
+
+Then open [http://localhost:8080](http://localhost:8080).
+
+## Adding a post
+
+1. Copy `templates/post.html` to `site/post/YYYY-MM-DD-short-slug/index.html`.
+2. Fill in the date, tags, and body. Photos and videos go in `site/media/YYYY-MM-DD-short-slug/` and are referenced from `/media/…` (see the template).
+3. Copy the `<article>…</article>` block to the **top** of:
+   - `site/index.html`
+   - the matching tag page (`site/family/index.html`, `site/climbing/index.html`, `site/gaming/index.html`, or `site/anime/index.html`)
+4. Optionally update the “Last updated” footer.
+5. Push to `master`.
+
+Paths are root-relative (`/post/…`, `/media/…`), so the article can be copied as-is.
+
+That’s the whole workflow: edit HTML, commit, push.
+
+Existing posts keep their old `/post/{id}/` URLs from the Tumblr days.
+
+## Deploy
+
+Push to `master`. [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) publishes the `site/` directory to GitHub Pages and sets the CNAME to `dad.evanjon.es`. No secrets beyond `GITHUB_TOKEN`. No build step.
 
 Take care,
 
