@@ -7,46 +7,36 @@
     <meta name="description" content="The corner of the internet where I dadpost.">
     <link rel="icon" href="/favicon.jpg" type="image/jpeg">
     <link rel="stylesheet" href="/css/style.css">
-    <script>
-      document.documentElement.dataset.theme =
-        localStorage.getItem("theme") ||
-        (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    </script>
   </head>
   <body>
-    <div class="page">
-      <header class="site-header">
-        <h1><a href="/">dadmaxxing</a></h1>
-        <p class="lede">The corner of the internet where I dadpost.</p>
-        <div class="nav-row">
-          <nav>
-          <a href="/" aria-current="page">Home</a>
-          <a href="/family/">Family</a>
-          <a href="/climbing/">Climbing</a>
-          <a href="/gaming/">Gaming</a>
-          <a href="/anime/">Anime</a>
-          <a href="https://github.com/defevan/dadmaxxing">Source</a>
-          </nav>
-          <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false">dark mode</button>
-        </div>
+    <a class="skip" href="#memories">Skip to memories</a>
+    <div class="leaf">
+      <header class="mast">
+        <p class="wordmark"><a href="/">dadmaxxing</a></p>
+        <p class="mast-aside"><a href="/">the album</a></p>
       </header>
-      <main>
-        <article class="post" id="799364521419505664">
-          <header class="post-header">
+      <main id="memories">
+        <article class="entry" id="799364521419505664">
+          <header class="entry-meta">
             <time datetime="2025-11-05T01:03:33-08:00"><a href="/post/799364521419505664/">November 5, 2025</a></time>
           </header>
-          <div class="post-body">
+          <div class="entry-body">
             <div class="npf_row"><figure class="tmblr-full" data-orig-height="397" data-orig-width="397"><img src="/media/799364521419505664/1.jpg" alt="" loading="lazy" decoding="async" width="397" height="397" style="aspect-ratio: 397 / 397"></figure></div><p>Yooooo?</p>
           </div>
-          <footer class="post-footer">
-        <a class="tag" href="/family/">#family</a>
+          <footer class="entry-rooms">
+            <a class="room" href="/family/">family</a>
           </footer>
         </article>
       </main>
-      <footer class="site-footer">
-        <p>Last updated December 21, 2025</p>
+      <footer class="colophon">
+        <p class="rooms">
+          <a href="/family/">family</a>
+          <a href="/climbing/">climbing</a>
+          <a href="/gaming/">gaming</a>
+          <a href="/anime/">anime</a>
+        </p>
+        <p>Last updated December 21, 2025 · <a class="source" href="https://github.com/defevan/dadmaxxing">source</a></p>
       </footer>
     </div>
-    <script src="/js/theme.js"></script>
   </body>
 </html>

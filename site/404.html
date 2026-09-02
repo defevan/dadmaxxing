@@ -7,38 +7,29 @@
     <meta name="description" content="The corner of the internet where I dadpost.">
     <link rel="icon" href="/favicon.jpg" type="image/jpeg">
     <link rel="stylesheet" href="/css/style.css">
-    <script>
-      document.documentElement.dataset.theme =
-        localStorage.getItem("theme") ||
-        (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    </script>
   </head>
   <body>
-    <div class="page">
-      <header class="site-header">
-        <h1><a href="/">dadmaxxing</a></h1>
-        <p class="lede">The corner of the internet where I dadpost.</p>
-        <div class="nav-row">
-          <nav>
-          <a href="/">Home</a>
-          <a href="/family/">Family</a>
-          <a href="/climbing/">Climbing</a>
-          <a href="/gaming/">Gaming</a>
-          <a href="/anime/">Anime</a>
-          <a href="https://github.com/defevan/dadmaxxing">Source</a>
-          </nav>
-          <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false">dark mode</button>
-        </div>
+    <a class="skip" href="#memories">Skip to memories</a>
+    <div class="album">
+      <header class="mast">
+        <p class="wordmark"><a href="/">dadmaxxing</a></p>
+        <p class="mast-aside"><a href="/">the album</a></p>
       </header>
-      <main>
-        <div class="not-found">
+      <main id="memories">
+        <div class="lost">
+          <h1>not here</h1>
           <p>¯\_(ツ)_/¯ 404 i couldn't find the thing</p>
         </div>
       </main>
-      <footer class="site-footer">
-        <p>Last updated December 21, 2025</p>
+      <footer class="colophon">
+        <p class="rooms">
+          <a href="/family/">family</a>
+          <a href="/climbing/">climbing</a>
+          <a href="/gaming/">gaming</a>
+          <a href="/anime/">anime</a>
+        </p>
+        <p>Last updated December 21, 2025 · <a class="source" href="https://github.com/defevan/dadmaxxing">source</a></p>
       </footer>
     </div>
-    <script src="/js/theme.js"></script>
   </body>
 </html>

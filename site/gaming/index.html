@@ -7,46 +7,39 @@
     <meta name="description" content="The corner of the internet where I dadpost.">
     <link rel="icon" href="/favicon.jpg" type="image/jpeg">
     <link rel="stylesheet" href="/css/style.css">
-    <script>
-      document.documentElement.dataset.theme =
-        localStorage.getItem("theme") ||
-        (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    </script>
   </head>
   <body>
-    <div class="page">
-      <header class="site-header">
-        <h1><a href="/">dadmaxxing</a></h1>
-        <p class="lede">The corner of the internet where I dadpost.</p>
-        <div class="nav-row">
-          <nav>
-          <a href="/">Home</a>
-          <a href="/family/">Family</a>
-          <a href="/climbing/">Climbing</a>
-          <a href="/gaming/" aria-current="page">Gaming</a>
-          <a href="/anime/">Anime</a>
-          <a href="https://github.com/defevan/dadmaxxing">Source</a>
-          </nav>
-          <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false">dark mode</button>
-        </div>
+    <a class="skip" href="#memories">Skip to memories</a>
+    <div class="album">
+      <header class="mast">
+        <p class="wordmark"><a href="/">dadmaxxing</a></p>
+        <p class="mast-aside"><a href="/">the album</a></p>
       </header>
-      <main>
-        <article class="post" id="802946200535023617">
-          <header class="post-header">
-            <time datetime="2025-12-14T13:52:48-08:00"><a href="/post/802946200535023617/">December 14, 2025</a></time>
-          </header>
-          <div class="post-body">
-            <div class="npf_row"><figure class="tmblr-full" data-orig-height="1158" data-orig-width="1503"><img src="/media/802946200535023617/1.png" alt="" loading="lazy" decoding="async" width="1503" height="1158" style="aspect-ratio: 1503 / 1158"></figure></div><p>Progress update on the hardcore mage. Bought mount at level 44, self-found. At the time of this writing, I&rsquo;m level 46. Considering dropping self-found&hellip;</p>
-          </div>
-          <footer class="post-footer">
-        <a class="tag" href="/gaming/">#gaming</a>
-          </footer>
-        </article>
+      <main id="memories">
+        <header class="room-head">
+          <h1>gaming</h1>
+        </header>
+        <ol class="mosaic">
+          <li class="tile tile--wide" id="802946200535023617">
+            <a class="tile-media" href="/post/802946200535023617/">
+              <img src="/media/802946200535023617/1.png" alt="" loading="lazy" decoding="async" width="1503" height="1158">
+            </a>
+            <div class="tile-cap">
+              <time datetime="2025-12-14T13:52:48-08:00"><a href="/post/802946200535023617/">14 December</a></time>
+              <a class="blurb" href="/post/802946200535023617/">Progress update on the hardcore mage. Bought mount at level 44, self-found. At the time of this writing, I’m level 46. Considering dropping self-found…</a>
+            </div>
+          </li>
+        </ol>
       </main>
-      <footer class="site-footer">
-        <p>Last updated December 21, 2025</p>
+      <footer class="colophon">
+        <p class="rooms">
+          <a href="/family/">family</a>
+          <a href="/climbing/">climbing</a>
+          <a href="/gaming/" aria-current="page">gaming</a>
+          <a href="/anime/">anime</a>
+        </p>
+        <p>Last updated December 21, 2025 · <a class="source" href="https://github.com/defevan/dadmaxxing">source</a></p>
       </footer>
     </div>
-    <script src="/js/theme.js"></script>
   </body>
 </html>

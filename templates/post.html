@@ -7,50 +7,40 @@
     <meta name="description" content="The corner of the internet where I dadpost.">
     <link rel="icon" href="/favicon.jpg" type="image/jpeg">
     <link rel="stylesheet" href="/css/style.css">
-    <script>
-      document.documentElement.dataset.theme =
-        localStorage.getItem("theme") ||
-        (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    </script>
   </head>
   <body>
-    <div class="page">
-      <header class="site-header">
-        <h1><a href="/">dadmaxxing</a></h1>
-        <p class="lede">The corner of the internet where I dadpost.</p>
-        <div class="nav-row">
-          <nav>
-            <a href="/">Home</a>
-            <a href="/family/">Family</a>
-            <a href="/climbing/">Climbing</a>
-            <a href="/gaming/">Gaming</a>
-            <a href="/anime/">Anime</a>
-            <a href="https://github.com/defevan/dadmaxxing">Source</a>
-          </nav>
-          <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false">dark mode</button>
-        </div>
+    <a class="skip" href="#memories">Skip to memories</a>
+    <div class="leaf">
+      <header class="mast">
+        <p class="wordmark"><a href="/">dadmaxxing</a></p>
+        <p class="mast-aside"><a href="/">the album</a></p>
       </header>
-      <main>
-        <!-- Copy this article to the top of site/index.html and the matching tag page. -->
-        <article class="post" id="YYYY-MM-DD-short-slug">
-          <header class="post-header">
+      <main id="memories">
+        <!-- Copy this article onto the permalink. Copy the tile from templates/tile.html onto the home mosaic and the matching room page. -->
+        <article class="entry" id="YYYY-MM-DD-short-slug">
+          <header class="entry-meta">
             <time datetime="YYYY-MM-DD"><a href="/post/YYYY-MM-DD-short-slug/">Month D, YYYY</a></time>
           </header>
-          <div class="post-body">
+          <div class="entry-body">
             <p>Write the post here. Put photos in <code>site/media/YYYY-MM-DD-short-slug/</code> and link them like:</p>
             <figure>
               <img src="/media/YYYY-MM-DD-short-slug/1.jpg" alt="">
             </figure>
           </div>
-          <footer class="post-footer">
-            <a class="tag" href="/family/">#family</a>
+          <footer class="entry-rooms">
+            <a class="room" href="/family/">family</a>
           </footer>
         </article>
       </main>
-      <footer class="site-footer">
-        <p>Last updated Month D, YYYY</p>
+      <footer class="colophon">
+        <p class="rooms">
+          <a href="/family/">family</a>
+          <a href="/climbing/">climbing</a>
+          <a href="/gaming/">gaming</a>
+          <a href="/anime/">anime</a>
+        </p>
+        <p>Last updated Month D, YYYY · <a class="source" href="https://github.com/defevan/dadmaxxing">source</a></p>
       </footer>
     </div>
-    <script src="/js/theme.js"></script>
   </body>
 </html>
