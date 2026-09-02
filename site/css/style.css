@@ -1,11 +1,11 @@
 :root {
   color-scheme: light;
-  --bg: #fff6ef;
-  --ink: #201812;
+  --bg: #fff3ea;
+  --ink: #1f1612;
   --muted: #8a786c;
   --accent: #c94b24;
-  --hair: color-mix(in srgb, var(--ink) 10%, transparent);
-  --mat: #efe4d8;
+  --hair: color-mix(in srgb, var(--ink) 14%, transparent);
+  --mat: #f0e0d2;
   --max: 34rem;
   --page-pad: 1.15rem;
   --photo-radius: 0.95rem;
@@ -209,15 +209,13 @@ main {
 .post-body .npf_row {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0.28rem;
+  gap: 0.45rem;
   margin: 0.75rem 0 0;
-  border-radius: var(--photo-radius);
 }
 
 .post-body .npf_row:has(> :nth-child(2)) {
   grid-template-columns: 1fr 1fr;
-  overflow: hidden;
-  background: var(--mat);
+  align-items: start;
 }
 
 .post-body figure {
@@ -234,29 +232,12 @@ main {
   display: block;
   width: 100%;
   height: auto;
-  background: var(--mat);
-}
-
-.post-body .npf_row:not(:has(> :nth-child(2))) img,
-.post-body > figure img,
-.post-body > figure video {
   border-radius: var(--photo-radius);
-}
-
-.feed .post-body .npf_row:has(> :nth-child(2)) img {
-  height: min(16.5rem, 46vw);
-  object-fit: cover;
-  object-position: center 20%;
+  background: var(--mat);
 }
 
 .permalink .post {
   border-bottom: 0;
-}
-
-.permalink .post-body .npf_row:has(> :nth-child(2)) img {
-  height: min(22rem, 52vw);
-  object-fit: cover;
-  object-position: center 20%;
 }
 
 .post-body figure:has(video) {
@@ -265,7 +246,6 @@ main {
 
 .post-body video {
   background: #1a1410;
-  border-radius: var(--photo-radius);
 }
 
 .tag {
@@ -350,9 +330,5 @@ main {
 
   .site-header h1 {
     font-size: 1.32rem;
-  }
-
-  .feed .post-body .npf_row:has(> :nth-child(2)) img {
-    height: 42vw;
   }
 }
