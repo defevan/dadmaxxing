@@ -1,25 +1,23 @@
 :root {
   color-scheme: light;
-  --bg: #f6f1e8;
-  --bg-raised: #fffdf8;
-  --ink: #1f1a14;
-  --muted: #6b6258;
-  --line: #e4d8c8;
-  --accent: #8a3b12;
-  --tag-bg: #efe4d4;
-  --max: 44rem;
-  --radius: 0.7rem;
+  --bg: #f3eee6;
+  --ink: #3a332c;
+  --muted: #7d7268;
+  --accent: #8f4d32;
+  --hair: color-mix(in srgb, var(--ink) 9%, transparent);
+  --photo-mat: color-mix(in srgb, #c4b6a4 22%, transparent);
+  --max: 38rem;
+  --radius: 0.55rem;
 }
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg: #1a1714;
-  --bg-raised: #24201b;
-  --ink: #f3eadc;
-  --muted: #b3a898;
-  --line: #3a342c;
-  --accent: #e8a27a;
-  --tag-bg: #322c26;
+  --bg: #2a241e;
+  --ink: #ebe4d8;
+  --muted: #b0a497;
+  --accent: #d4a07a;
+  --hair: color-mix(in srgb, var(--ink) 12%, transparent);
+  --photo-mat: color-mix(in srgb, #000 18%, transparent);
 }
 
 * {
@@ -27,19 +25,27 @@
 }
 
 html {
-  font-size: 112.5%;
+  background: var(--bg);
+  font-size: 106.25%;
+  -webkit-font-smoothing: antialiased;
+  text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
-  line-height: 1.6;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 450;
+  line-height: 1.65;
+  letter-spacing: -0.011em;
 }
 
 a {
   color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
 }
 
 a:hover {
@@ -47,26 +53,25 @@ a:hover {
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid color-mix(in srgb, var(--accent) 70%, var(--bg));
   outline-offset: 3px;
 }
 
 .page {
-  width: min(var(--max), calc(100% - 2rem));
+  width: min(var(--max), calc(100% - 2.5rem));
   margin: 0 auto;
-  padding: 1.75rem 0 3rem;
+  padding: 3.25rem 0 4.5rem;
 }
 
 .site-header {
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid var(--line);
+  margin-bottom: 0.25rem;
 }
 
 .site-header h1 {
   margin: 0;
-  font-size: 1.85rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
   line-height: 1.2;
 }
 
@@ -76,34 +81,46 @@ a:hover {
 }
 
 .lede {
-  margin: 0.35rem 0 0;
+  margin: 0.45rem 0 0;
+  max-width: 28rem;
   color: var(--muted);
+  font-size: 0.98rem;
+  font-weight: 400;
+  letter-spacing: -0.008em;
 }
 
 .nav-row {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  gap: 0.75rem 1.25rem;
-  margin-top: 1rem;
+  gap: 0.85rem 1.5rem;
+  margin-top: 1.6rem;
 }
 
 nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem 1rem;
+  gap: 0.35rem 1.05rem;
 }
 
 nav a {
-  color: inherit;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
   text-decoration: none;
 }
 
 nav a:hover,
 nav a[aria-current="page"] {
+  color: var(--ink);
+}
+
+nav a[aria-current="page"] {
   text-decoration: underline;
-  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.28em;
 }
 
 .theme-toggle {
@@ -113,9 +130,10 @@ nav a[aria-current="page"] {
   background: none;
   color: var(--muted);
   font: inherit;
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
   cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
 }
 
 .theme-toggle:hover {
@@ -123,31 +141,26 @@ nav a[aria-current="page"] {
 }
 
 main {
-  padding: 0.5rem 0 1.5rem;
+  padding: 1.75rem 0 2.5rem;
 }
 
 .post {
-  padding: 1.75rem 0;
-  border-bottom: 1px solid var(--line);
+  padding: 2.6rem 0;
 }
 
-.post:last-child {
-  border-bottom: 0;
+.post + .post {
+  border-top: 1px solid var(--hair);
 }
 
 .post-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 0.9rem;
+  margin-bottom: 0.85rem;
 }
 
 .post-header time {
   color: var(--muted);
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 0.85rem;
-  letter-spacing: 0.02em;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .post-header time a {
@@ -157,7 +170,6 @@ main {
 
 .post-header time a:hover {
   color: var(--accent);
-  text-decoration: underline;
 }
 
 .post-body > *:first-child {
@@ -170,27 +182,30 @@ main {
 
 .post-body p,
 .post-body h2 {
-  margin: 0.85rem 0;
+  margin: 0.9rem 0;
 }
 
 .post-body h2 {
-  font-size: 1.15rem;
-  line-height: 1.3;
+  margin-top: 1.6rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
 }
 
 .post-body .npf_row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0 0 0.9rem;
+  gap: 0.55rem;
+  margin: 0 0 1rem;
 }
 
 .post-body figure {
-  margin: 0 0 0.9rem;
+  margin: 0 0 1rem;
 }
 
 .post-body .npf_row figure {
-  flex: 1 1 14rem;
+  flex: 1 1 13.5rem;
   margin: 0;
 }
 
@@ -200,29 +215,25 @@ main {
   width: 100%;
   height: auto;
   border-radius: var(--radius);
-  background: color-mix(in srgb, var(--muted) 12%, transparent);
+  background: var(--photo-mat);
 }
 
 .post-body figure:has(video) {
-  max-width: 22rem;
-  margin-inline: auto 0;
+  max-width: 20rem;
 }
 
 .post-footer {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 1rem;
+  gap: 0.35rem 0.85rem;
+  margin-top: 1.05rem;
 }
 
 .tag {
-  display: inline-block;
-  padding: 0.15rem 0.65rem;
-  border-radius: 999px;
-  background: var(--tag-bg);
-  color: inherit;
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 0.78rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
   text-decoration: none;
 }
 
@@ -231,11 +242,10 @@ main {
 }
 
 .site-footer {
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--line);
   color: var(--muted);
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .site-footer p {
@@ -243,7 +253,7 @@ main {
 }
 
 .not-found {
-  padding: 2.5rem 0;
+  padding: 3.5rem 0;
 }
 
 .not-found p {
@@ -256,11 +266,19 @@ main {
   }
 
   .page {
-    width: min(var(--max), calc(100% - 1.5rem));
-    padding-top: 1.25rem;
+    width: min(var(--max), calc(100% - 1.75rem));
+    padding: 2rem 0 3.25rem;
   }
 
   .site-header h1 {
-    font-size: 1.6rem;
+    font-size: 1.28rem;
+  }
+
+  .nav-row {
+    margin-top: 1.25rem;
+  }
+
+  .post {
+    padding: 2.1rem 0;
   }
 }
