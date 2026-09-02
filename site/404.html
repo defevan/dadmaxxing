@@ -5,30 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>404 — dadmaxxing</title>
     <meta name="description" content="The corner of the internet where I dadpost.">
+    <meta name="theme-color" content="#fff3ea">
     <link rel="icon" href="/favicon.jpg" type="image/jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@1,16..72,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
-    <script>
-      document.documentElement.dataset.theme =
-        localStorage.getItem("theme") ||
-        (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    </script>
   </head>
   <body>
     <div class="page">
       <header class="site-header">
-        <h1><a href="/">dadmaxxing</a></h1>
-        <p class="lede">The corner of the internet where I dadpost.</p>
-        <div class="nav-row">
-          <nav>
+        <div class="brand">
+          <a href="/"><img class="avatar" src="/favicon.jpg" alt="" width="48" height="48"></a>
+          <div class="brand-text">
+            <h1><a href="/">dadmaxxing</a></h1>
+            <p class="lede">The corner of the internet where I dadpost.</p>
+          </div>
+        </div>
+        <nav aria-label="Tags">
           <a href="/">Home</a>
           <a href="/family/">Family</a>
           <a href="/climbing/">Climbing</a>
           <a href="/gaming/">Gaming</a>
           <a href="/anime/">Anime</a>
-          <a href="https://github.com/defevan/dadmaxxing">Source</a>
-          </nav>
-          <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false">dark mode</button>
-        </div>
+        </nav>
       </header>
       <main>
         <div class="not-found">
@@ -36,9 +36,8 @@
         </div>
       </main>
       <footer class="site-footer">
-        <p>Last updated December 21, 2025</p>
+        <p>Last updated December 21, 2025 · <a href="https://github.com/defevan/dadmaxxing">source</a></p>
       </footer>
     </div>
-    <script src="/js/theme.js"></script>
   </body>
 </html>
