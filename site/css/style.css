@@ -219,23 +219,19 @@ main {
   line-height: 1.3;
 }
 
-.post-body .npf_row {
+.post-body .row {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.45rem;
-  margin: 0.75rem 0 0;
-}
-
-.post-body .npf_row:has(> :nth-child(2)) {
   grid-template-columns: 1fr 1fr;
   align-items: start;
+  gap: 0.45rem;
+  margin: 0.75rem 0 0;
 }
 
 .post-body figure {
   margin: 0.75rem 0 0;
 }
 
-.post-body .npf_row figure {
+.post-body .row figure {
   margin: 0;
   min-width: 0;
 }
@@ -317,7 +313,6 @@ main {
   }
 
   /* Shrink tall portraits so the feed stays scannable on a laptop. */
-  .feed .post-body .npf_row:not(:has(> :nth-child(2))) img,
   .feed .post-body > figure img,
   .feed .post-body > figure video {
     width: auto;
