@@ -1,0 +1,43 @@
+services:
+  caddy:
+    image: caddy:2.9-alpine
+    restart: unless-stopped
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./site:/srv:ro
+      - caddy-logs:/var/log/caddy
+    expose:
+      - "80"
+    networks:
+      - default
+      - dokploy-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Tail Caddy JSON access logs into Gravwell tag=web via HTTP ingest.
+  logship:
+    image: alpine:3.20
+    restart: unless-stopped
+    depends_on:
+      - caddy
+    environment:
+      GRAVWELL_INGEST_URL: ${GRAVWELL_INGEST_URL:-http://gravwell:8080/web}
+      GRAVWELL_INGEST_TOKEN: ${GRAVWELL_INGEST_TOKEN}
+    volumes:
+      - caddy-logs:/var/log/caddy:ro
+      - ./deploy/ship-logs.sh:/ship-logs.sh:ro
+    command: ["/bin/sh", "/ship-logs.sh"]
+    networks:
+      - default
+      - dokploy-network
+
+networks:
+  dokploy-network:
+    external: true
+
+volumes:
+  caddy-logs:

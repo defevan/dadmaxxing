@@ -1,3 +1,6 @@
 .DS_Store
 *.log
 .venv/
+
+# Dokploy secrets
+.env
