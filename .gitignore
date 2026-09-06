@@ -4,3 +4,4 @@
 
 # Dokploy secrets
 .env
+.secrets/

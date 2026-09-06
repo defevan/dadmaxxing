@@ -35,6 +35,20 @@ services:
       - default
       - dokploy-network
 
+  # Public HTTPS for dad.evanjon.es via Cloudflare Tunnel (no WAN ports).
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN}
+    depends_on:
+      caddy:
+        condition: service_healthy
+    networks:
+      - default
+      - dokploy-network
+
 networks:
   dokploy-network:
     external: true

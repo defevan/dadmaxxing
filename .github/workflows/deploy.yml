@@ -1,12 +1,13 @@
+# GitHub Pages publish disabled — dad.evanjon.es is served via Cloudflare Tunnel
+# from Dokploy/Caddy on norfair. Re-enable only if you intentionally return to Pages.
 name: deploy
 
 on:
-  push:
-    branches: [master]
   workflow_dispatch: {}
 
 jobs:
   deploy:
+    if: false
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
