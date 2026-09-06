@@ -11,7 +11,7 @@
 	root * /srv
 	encode gzip
 
-	handle /healthz {
+	handle /health {
 		respond "ok" 200
 	}
 
