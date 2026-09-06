@@ -8,14 +8,21 @@ URL="${GRAVWELL_INGEST_URL:-http://gravwell:8080/web}"
 TOKEN="${GRAVWELL_INGEST_TOKEN:?GRAVWELL_INGEST_TOKEN is required}"
 LOG="${CADDY_ACCESS_LOG:-/var/log/caddy/access.log}"
 
-mkdir -p "$(dirname "$LOG")"
-touch "$LOG"
+echo "waiting for $LOG"
+i=0
+while [ ! -f "$LOG" ]; do
+	i=$((i + 1))
+	if [ "$i" -ge 120 ]; then
+		echo "error: $LOG not created by Caddy" >&2
+		exit 1
+	fi
+	sleep 1
+done
 
 echo "shipping $LOG -> $URL"
 
 tail -n0 -F "$LOG" | while IFS= read -r line || [ -n "$line" ]; do
 	[ -z "$line" ] && continue
-	# One Gravwell entry per access-log line (JSON body).
 	curl -sS -m 10 \
 		-H "Authorization: Bearer ${TOKEN}" \
 		-H "Content-Type: application/json" \
