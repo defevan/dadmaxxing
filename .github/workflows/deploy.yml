@@ -27,7 +27,7 @@ jobs:
         with:
           repository: defevan/infra
           ref: master
-          token: ${{ secrets.INFRA_BUMP_TOKEN }}
+          ssh-key: ${{ secrets.INFRA_BUMP_SSH_KEY }}
 
       - name: bump apps/dadmaxxing
         env:
