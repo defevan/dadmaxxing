@@ -18,31 +18,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./site
           cname: dad.evanjon.es
-
-  bump-infra:
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout infra
-        uses: actions/checkout@v4
-        with:
-          repository: defevan/infra
-          ref: master
-          ssh-key: ${{ secrets.INFRA_BUMP_SSH_KEY }}
-
-      - name: bump apps/dadmaxxing
-        env:
-          SHA: ${{ github.sha }}
-          PATH_SPEC: apps/dadmaxxing
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          current="$(git rev-parse "HEAD:${PATH_SPEC}")"
-          if [ "$current" = "$SHA" ]; then
-            echo "Already at $SHA"
-            exit 0
-          fi
-          git update-index --cacheinfo "160000,${SHA},${PATH_SPEC}"
-          short="${SHA:0:7}"
-          git commit -m "chore: bump ${PATH_SPEC} to ${short}"
-          git push origin HEAD:master

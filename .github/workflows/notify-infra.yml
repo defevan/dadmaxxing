@@ -1,0 +1,22 @@
+name: notify-infra
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch: {}
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: dispatch bump-submodule on infra
+        env:
+          GH_TOKEN: ${{ secrets.INFRA_DISPATCH_TOKEN }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          gh api --method POST \
+            repos/defevan/infra/actions/workflows/bump-submodule.yml/dispatches \
+            -f ref=master \
+            -f "inputs[path]=apps/dadmaxxing" \
+            -f "inputs[sha]=${SHA}"
