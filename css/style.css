@@ -247,7 +247,8 @@ main {
   background: var(--mat);
 }
 
-/* Self-link around photos: stay a block so layout matches unwrapped imgs,
+/* Self-link around photos: stay a block so layout matches unwrapped imgs
+   (fluid width: 100% children still fill the column / row cell),
    and do not pick up the default <a> underline / accent color. */
 .post-body a:has(> img),
 .post-body a:has(> img):hover {
@@ -331,6 +332,13 @@ main {
     height: auto;
     max-width: 100%;
     max-height: 28rem;
+  }
+
+  /* Those photos no longer fill the column. Shrink-wrap the self-link so
+     the hit target matches the painted image (not the empty block). */
+  .feed .post-body > figure a:has(> img) {
+    width: fit-content;
+    max-width: 100%;
   }
 }
 
