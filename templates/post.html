@@ -54,10 +54,10 @@
           <div class="post-body">
             <p>The post. Keep it short.</p>
             <figure>
-              <!-- Required: style="aspect-ratio: W / H" matching the image file (CLS). Display size stays fluid via CSS. -->
-              <img src="/media/YYYY-MM-DD-short-slug/1.jpg" alt="" style="aspect-ratio: 3 / 4">
+              <!-- Required: wrap in <a href="same src"> so click opens the original. style="aspect-ratio: W / H" matching the file (CLS). Display size stays fluid via CSS. -->
+              <a href="/media/YYYY-MM-DD-short-slug/1.jpg"><img src="/media/YYYY-MM-DD-short-slug/1.jpg" alt="" style="aspect-ratio: 3 / 4"></a>
             </figure>
-            <!-- Two side-by-side photos: wrap both figures in <div class="row">. Same aspect-ratio style on each image. -->
+            <!-- Two side-by-side photos: wrap both figures in <div class="row">. Same self-link + aspect-ratio style on each image. -->
           </div>
           <a class="tag" href="/family/">#family</a>
         </article>

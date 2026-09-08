@@ -6,7 +6,7 @@ on:
     branches: [master]
 
 jobs:
-  aspect-ratio:
+  content-images:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
@@ -17,5 +17,5 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: require CSS aspect-ratio on images
+      - name: require aspect-ratio and self-link wraps
         run: python3 scripts/check_img_aspect_ratio.py
