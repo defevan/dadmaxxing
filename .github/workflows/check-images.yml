@@ -17,5 +17,5 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: require CSS aspect-ratio on images
+      - name: require CSS aspect-ratio and self-links on images
         run: python3 scripts/check_img_aspect_ratio.py

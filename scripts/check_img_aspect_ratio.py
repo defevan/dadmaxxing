@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
-"""Require CSS aspect-ratio on every content image/video.
+"""Require CSS aspect-ratio and self-links on every content image.
 
 Imported posts used to ship `style="aspect-ratio: W / H"` on each <img>
 (Tumblr leftover, removed in PR #7). That is the CLS pattern this site
 uses: reserve the box in CSS while `width: 100%; height: auto` keeps
 display fluid.
 
+Content photos must also be wrapped so a click opens the file itself:
+
+  <a href="/media/…/1.jpg"><img src="/media/…/1.jpg" …></a>
+
 This check fails when a content <img> or <video> is missing that
 inline style, or when the ratio does not match the referenced local
-file. Header avatars are skipped (fixed CSS size). Template files may
-point at placeholder paths that do not exist; they still need the style.
+file, or when a content <img> is not wrapped in <a href="same-src">.
+Header avatars are skipped (fixed CSS size, link home). Videos are
+not wrapped. Template files may point at placeholder paths that do
+not exist; they still need the style and the self-link wrap.
 
 Usage:
   python3 scripts/check_img_aspect_ratio.py
@@ -32,6 +38,8 @@ CSS_PATH = SITE / "css" / "style.css"
 
 IMG_TAG_RE = re.compile(r"<img\b([^>]*)>", re.I)
 VIDEO_OPEN_RE = re.compile(r"<video\b([^>]*)>", re.I)
+A_OPEN_RE = re.compile(r"<a\b([^>]*)>", re.I)
+A_CLOSE_RE = re.compile(r"</a\s*>", re.I)
 COMMENT_RE = re.compile(r"<!--.*?-->", re.S)
 SOURCE_SRC_RE = re.compile(r"<source\b[^>]*\bsrc\s*=\s*['\"]([^'\"]+)['\"]", re.I)
 ATTR_RE = re.compile(
@@ -312,6 +320,37 @@ def skip_img(attrs: dict[str, str]) -> bool:
     return bool(CLASS_RE.search(attrs.get("class", "")))
 
 
+def open_anchor_before(html: str, pos: int) -> re.Match[str] | None:
+    """Innermost <a> that is still open at pos, or None."""
+    before = html[:pos]
+    last_open = None
+    for match in A_OPEN_RE.finditer(before):
+        last_open = match
+    if last_open is None:
+        return None
+    last_close = None
+    for match in A_CLOSE_RE.finditer(before):
+        last_close = match
+    if last_close is not None and last_close.start() > last_open.start():
+        return None
+    return last_open
+
+
+def is_self_linked(html: str, img_start: int, img_end: int, src: str) -> bool:
+    """True when <a href="{src}"> immediately wraps the img."""
+    open_a = open_anchor_before(html, img_start)
+    if open_a is None:
+        return False
+    href = parse_attrs(open_a.group(1)).get("href", "")
+    if href != src:
+        return False
+    # Only whitespace between <a> and <img>, and </a> right after.
+    between = html[open_a.end() : img_start]
+    if between.strip():
+        return False
+    return bool(re.match(r"\s*</a\s*>", html[img_end:], re.I))
+
+
 def check_css() -> list[str]:
     errors: list[str] = []
     css = CSS_PATH.read_text(encoding="utf-8")
@@ -331,6 +370,21 @@ def check_css() -> list[str]:
     if not re.search(r"\bheight\s*:\s*auto\s*;", body):
         errors.append(
             f"{CSS_PATH.relative_to(ROOT)}: .post-body img/video must keep height: auto"
+        )
+    # Linked photos must not pick up the global <a> underline / accent color.
+    link = re.search(
+        r"\.post-body a:has\(\s*>\s*img\s*\)\s*\{([^}]+)\}",
+        css,
+        re.S,
+    )
+    if not link:
+        errors.append(
+            f"{CSS_PATH.relative_to(ROOT)}: missing .post-body a:has(> img) rule"
+        )
+    elif not re.search(r"\btext-decoration\s*:\s*none\s*;", link.group(1)):
+        errors.append(
+            f"{CSS_PATH.relative_to(ROOT)}: "
+            ".post-body a:has(> img) must keep text-decoration: none"
         )
     return errors
 
@@ -422,10 +476,60 @@ def process_file(path: Path, fix: bool) -> tuple[list[str], bool]:
     html = IMG_TAG_RE.sub(lambda m: handle("img", m), html)
     html = VIDEO_OPEN_RE.sub(lambda m: handle("video", m), html)
 
+    html, wrap_errors = ensure_self_links(html, rel, fix)
+    errors.extend(wrap_errors)
+
     changed = html != original
     if changed and fix:
         path.write_text(html, encoding="utf-8")
     return errors, changed
+
+
+def ensure_self_links(
+    html: str, rel: Path, fix: bool
+) -> tuple[str, list[str]]:
+    """Require <a href=img-src> immediately around each content image."""
+    errors: list[str] = []
+    comments = [(m.start(), m.end()) for m in COMMENT_RE.finditer(html)]
+
+    def in_comment(pos: int) -> bool:
+        return any(start <= pos < end for start, end in comments)
+
+    pieces: list[str] = []
+    last = 0
+    for match in IMG_TAG_RE.finditer(html):
+        if in_comment(match.start()):
+            continue
+        attrs = parse_attrs(match.group(1))
+        if skip_img(attrs):
+            continue
+        src = attrs.get("src")
+        loc = f"{rel}:{html[: match.start()].count(chr(10)) + 1}"
+        if not src:
+            continue
+        if is_self_linked(html, match.start(), match.end(), src):
+            continue
+        open_a = open_anchor_before(html, match.start())
+        if open_a is not None:
+            href = parse_attrs(open_a.group(1)).get("href", "")
+            errors.append(
+                f'{loc}: <img> {src} is inside <a href="{href}">; '
+                f'href must be the image src (do not nest links)'
+            )
+            continue
+        if fix:
+            pieces.append(html[last : match.start()])
+            pieces.append(f'<a href="{src}">{match.group(0)}</a>')
+            last = match.end()
+        else:
+            errors.append(
+                f'{loc}: <img> {src} must be wrapped in <a href="{src}">'
+            )
+    if fix and pieces:
+        pieces.append(html[last:])
+        html = "".join(pieces)
+        return html, []
+    return html, errors
 
 
 def main() -> int:
@@ -433,7 +537,7 @@ def main() -> int:
     parser.add_argument(
         "--fix",
         action="store_true",
-        help="write style=\"aspect-ratio: W / H\" from each local file",
+        help="write style=\"aspect-ratio: W / H\" and wrap content images in self-links",
     )
     args = parser.parse_args()
 
@@ -455,9 +559,12 @@ def main() -> int:
             print("\n".join(leftover), file=sys.stderr)
             return 1
         if changed_any:
-            print("Wrote aspect-ratio styles from local media files.")
+            print("Wrote aspect-ratio styles and self-link wraps from local files.")
         else:
-            print("All content images/videos already have matching aspect-ratio styles.")
+            print(
+                "All content images/videos already have matching aspect-ratio "
+                "styles and self-link wraps."
+            )
         return 0
 
     if errors:
@@ -466,13 +573,14 @@ def main() -> int:
             f"\n{len(errors)} problem(s). "
             "Add style=\"aspect-ratio: W / H\" matching the file "
             "(imported posts used this CSS pattern). "
+            "Wrap each content <img> in <a href=\"same-src\">. "
             "Display size stays fluid via .post-body img { width: 100%; height: auto; }. "
-            "Re-run with --fix to fill values from local files.",
+            "Re-run with --fix to fill values and wraps from local files.",
             file=sys.stderr,
         )
         return 1
 
-    print("OK: content images/videos reserve aspect-ratio in CSS.")
+    print("OK: content images/videos reserve aspect-ratio and images self-link.")
     return 0
 
 
