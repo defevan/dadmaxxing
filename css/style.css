@@ -39,7 +39,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: Figtree, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: "EB Garamond", Georgia, "Times New Roman", serif;
   font-size: 1.0625rem;
   font-weight: 450;
   line-height: 1.5;
@@ -104,13 +104,13 @@ a:hover {
 
 .site-header h1 {
   margin: 0;
-  font-family: Newsreader, Georgia, "Times New Roman", serif;
-  font-optical-sizing: auto;
+  font-family: "New Rocker", Georgia, "Times New Roman", serif;
   font-size: 1.45rem;
-  font-style: italic;
-  font-weight: 500;
+  font-style: normal;
+  font-weight: 400;
   letter-spacing: -0.025em;
   line-height: 1.15;
+  text-transform: uppercase;
 }
 
 .site-header h1 a {
