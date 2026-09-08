@@ -398,6 +398,28 @@ def check_css() -> list[str]:
             errors.append(
                 f"{CSS_PATH.relative_to(ROOT)}: photo self-links must reset text-decoration"
             )
+    feed_link = re.search(
+        r"\.feed\s+\.post-body\s*>\s*figure\s+a:has\(\s*>\s*img\s*\)[^{]*\{([^}]+)\}",
+        css,
+        re.S,
+    )
+    if not feed_link:
+        errors.append(
+            f"{CSS_PATH.relative_to(ROOT)}: missing .feed .post-body > figure "
+            "a:has(> img) shrink-wrap rule"
+        )
+    else:
+        feed_body = feed_link.group(1)
+        if not re.search(r"\bwidth\s*:\s*fit-content\s*;", feed_body):
+            errors.append(
+                f"{CSS_PATH.relative_to(ROOT)}: desktop feed photo self-links "
+                "must be width: fit-content so the hit target matches the image"
+            )
+        if not re.search(r"\bmax-width\s*:\s*100%\s*;", feed_body):
+            errors.append(
+                f"{CSS_PATH.relative_to(ROOT)}: desktop feed photo self-links "
+                "must keep max-width: 100%"
+            )
     return errors
 
 
