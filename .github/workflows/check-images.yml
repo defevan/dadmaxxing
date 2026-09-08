@@ -1,0 +1,21 @@
+name: check images
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+jobs:
+  aspect-ratio:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+
+      - name: set up python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: require CSS aspect-ratio on images
+        run: python3 scripts/check_img_aspect_ratio.py

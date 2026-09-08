@@ -54,9 +54,10 @@
           <div class="post-body">
             <p>The post. Keep it short.</p>
             <figure>
-              <img src="/media/YYYY-MM-DD-short-slug/1.jpg" alt="">
+              <!-- Required: style="aspect-ratio: W / H" matching the image file (CLS). Display size stays fluid via CSS. -->
+              <img src="/media/YYYY-MM-DD-short-slug/1.jpg" alt="" style="aspect-ratio: 3 / 4">
             </figure>
-            <!-- Two side-by-side photos: wrap both <figure>s in <div class="row">. -->
+            <!-- Two side-by-side photos: wrap both figures in <div class="row">. Same aspect-ratio style on each image. -->
           </div>
           <a class="tag" href="/family/">#family</a>
         </article>

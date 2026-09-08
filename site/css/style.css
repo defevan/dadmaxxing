@@ -236,6 +236,8 @@ main {
   min-width: 0;
 }
 
+/* Fluid display size. Each <img>/<video> also sets style="aspect-ratio: W / H"
+   (the imported-post pattern) so the box is reserved before the file loads. */
 .post-body img,
 .post-body video {
   display: block;
@@ -312,10 +314,12 @@ main {
     padding: 1.35rem 0 1.45rem;
   }
 
-  /* Shrink tall portraits so the feed stays scannable on a laptop. */
+  /* Shrink tall portraits so the feed stays scannable on a laptop.
+     height: auto keeps the inline aspect-ratio; do not paint at intrinsic px. */
   .feed .post-body > figure img,
   .feed .post-body > figure video {
     width: auto;
+    height: auto;
     max-width: 100%;
     max-height: 28rem;
   }
