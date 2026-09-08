@@ -247,6 +247,15 @@ main {
   background: var(--mat);
 }
 
+/* Self-link around photos: stay a block so layout matches unwrapped imgs,
+   and do not pick up the default <a> underline / accent color. */
+.post-body a:has(> img),
+.post-body a:has(> img):hover {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
 .permalink .post {
   border-bottom: 0;
 }
