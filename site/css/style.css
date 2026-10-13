@@ -227,6 +227,10 @@ main {
   margin: 0.75rem 0 0;
 }
 
+.post-body .row.row-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
 .post-body figure {
   margin: 0.75rem 0 0;
 }
