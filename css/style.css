@@ -157,7 +157,7 @@ main {
   padding: 0;
 }
 
-/* Tweet-shaped stack: time + tag, copy, then media. */
+/* Tweet-shaped stack: time + tag(s), copy, then media. */
 .post {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -186,6 +186,28 @@ main {
 .post > .tag {
   grid-column: 2;
   grid-row: 1;
+}
+
+/* Several tags share that same header cell: one right-aligned line beside the date.
+   A lone .post > .tag (every current post) is left untouched. */
+.post > .tags {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  align-self: baseline;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  justify-content: flex-end;
+  column-gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.tags > .tag {
+  flex: none;
 }
 
 .post-body {
@@ -363,5 +385,20 @@ main {
 
   .site-header h1 {
     font-size: 1.32rem;
+  }
+}
+
+/* Four tags beside the longest date overflow a 320px row and would wrap the
+   year onto a second line. Keep that header to one line; the date ellipsizes. */
+@media (max-width: 360px) {
+  .post:has(> .tags > a:nth-child(4)) > time {
+    min-width: 0;
+  }
+
+  .post:has(> .tags > a:nth-child(4)) > time a {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
