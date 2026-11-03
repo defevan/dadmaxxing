@@ -19,3 +19,6 @@ jobs:
 
       - name: require aspect-ratio and self-link wraps
         run: python3 scripts/check_img_aspect_ratio.py
+
+      - name: require posts on each tag page
+        run: python3 scripts/check_post_tags.py

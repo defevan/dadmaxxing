@@ -48,7 +48,10 @@
         </nav>
       </header>
       <main>
-        <!-- Copy this <article> to the TOP of site/index.html and the matching tag page. -->
+        <!-- Copy this <article> to the TOP of site/index.html and to every tag page it links
+             (site/family/, site/climbing/, site/gaming/, site/anime/). One tag can be a lone
+             <a class="tag">. Several tags stay in this <div class="tags">; drop the ones that
+             do not apply. -->
         <article class="post" id="YYYY-MM-DD-short-slug">
           <time datetime="YYYY-MM-DD"><a href="/post/YYYY-MM-DD-short-slug/">Month D, YYYY</a></time>
           <div class="post-body">
@@ -59,7 +62,10 @@
             </figure>
             <!-- Two side-by-side photos: wrap both figures in <div class="row">. Same self-link + aspect-ratio style on each image. -->
           </div>
-          <a class="tag" href="/family/">#family</a>
+          <div class="tags">
+            <a class="tag" href="/family/">#family</a>
+            <a class="tag" href="/climbing/">#climbing</a>
+          </div>
         </article>
       </main>
       <footer class="site-footer">
