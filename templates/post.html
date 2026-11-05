@@ -60,7 +60,10 @@
               <!-- Required: wrap in <a href="same src"> so click opens the original. style="aspect-ratio: W / H" matching the file (CLS). Display size stays fluid via CSS. -->
               <a href="/media/YYYY-MM-DD-short-slug/1.jpg"><img src="/media/YYYY-MM-DD-short-slug/1.jpg" alt="" style="aspect-ratio: 3 / 4"></a>
             </figure>
-            <!-- Two side-by-side photos: wrap both figures in <div class="row">. Same self-link + aspect-ratio style on each image. -->
+            <!-- Side-by-side photos: wrap the figures in <div class="row"> (two columns)
+                 or <div class="row row-3"> (three). Same self-link and per-file
+                 aspect-ratio on each image. CSS equalizes height on each line
+                 (object-fit: cover); the ratios do not have to match. -->
           </div>
           <div class="tags">
             <a class="tag" href="/family/">#family</a>
